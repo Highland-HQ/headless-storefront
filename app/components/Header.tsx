@@ -3,6 +3,7 @@ import {Await, NavLink} from '@remix-run/react';
 import {type CartViewPayload, useAnalytics} from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
+import {Menu} from 'lucide-react';
 
 interface HeaderProps {
   header: HeaderQuery;
@@ -124,13 +125,16 @@ function HeaderMenuMobileToggle() {
       className="header-menu-mobile-toggle reset"
       onClick={() => open('mobile')}
     >
-      <h3>☰</h3>
+      <h3>
+        <Menu className="h-4 w-4" />
+      </h3>
     </button>
   );
 }
 
 function SearchToggle() {
   const {open} = useAside();
+
   return (
     <button className="reset" onClick={() => open('search')}>
       Search
