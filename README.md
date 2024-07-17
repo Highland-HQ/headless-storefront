@@ -19,7 +19,3 @@ You can take a look at our store at https://highlandhq.com
 3. Copy .env.example to .env, and fill in the required variables
 4. (Optional) install the shopify CLI tool with `npm install -g @shopify/cli@latest`
 5. Spin up the app locally with `shopify hydrogen dev`
-
-## License
-
-This project is licensed under the MIT License.
