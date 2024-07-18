@@ -23,25 +23,23 @@ export function Header({
   const {shop, menu} = header;
 
   return (
-    <header>
-      <div className="max-w-7xl mx-auto flex items-end justify-between p-4">
-        <div className="flex items-end gap-12">
-          <NavLink
-            className="text-2xl"
-            prefetch="intent"
-            to="/"
-            style={activeLinkStyle}
-            end
-          >
-            {shop.name}
-          </NavLink>
-          <HeaderMenu
-            menu={menu}
-            viewport="desktop"
-            primaryDomainUrl={header.shop.primaryDomain.url}
-            publicStoreDomain={publicStoreDomain}
-          />
-        </div>
+    <header className="bg-red-300">
+      <div className="max-w-layout mx-auto flex items-center justify-between p-4">
+        <NavLink
+          className="text-2xl flex-1"
+          prefetch="intent"
+          to="/"
+          style={activeLinkStyle}
+          end
+        >
+          {shop.name}
+        </NavLink>
+        <HeaderMenu
+          menu={menu}
+          viewport="desktop"
+          primaryDomainUrl={header.shop.primaryDomain.url}
+          publicStoreDomain={publicStoreDomain}
+        />
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </div>
     </header>
@@ -67,7 +65,7 @@ export function HeaderMenu({
   }
 
   return (
-    <nav role="navigation" className="space-x-3">
+    <nav role="navigation" className="flex-1 flex items-center justify-evenly">
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
@@ -87,7 +85,7 @@ export function HeaderMenu({
             prefetch="intent"
             style={activeLinkStyle}
             to={url}
-            className="uppercase"
+            className="hover:no-underline"
           >
             {item.title}
           </NavLink>
@@ -102,7 +100,10 @@ function HeaderCtas({
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
-    <nav role="navigation" className="flex items-center gap-4">
+    <nav
+      role="navigation"
+      className="flex justify-end items-center gap-4 flex-1"
+    >
       <HeaderMenuMobileToggle />
       <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
         <Suspense fallback="Sign in">
@@ -128,9 +129,7 @@ function HeaderMenuMobileToggle() {
   const {open} = useAside();
   return (
     <button onClick={() => open('mobile')}>
-      <h3>
-        <Menu className="h-4 w-4" />
-      </h3>
+      <Menu className="h-6 w-6" />
     </button>
   );
 }

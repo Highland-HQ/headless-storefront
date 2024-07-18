@@ -4,3 +4,7 @@
  */
 
 @import 'tailwindcss';
+
+@theme {
+  --width-layout: 100rem;
+}
