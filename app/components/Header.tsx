@@ -23,13 +23,15 @@ export function Header({
   const {shop, menu} = header;
 
   return (
-    <header className="bg-red-300">
-      <div className="max-w-layout mx-auto flex items-center justify-between p-4">
+    <header className="fixed w-screen top-0 z-50">
+      <div className="max-w-layout mx-auto flex items-center justify-between py-4 px-4 md:px-0">
         <NavLink
-          className="text-2xl flex-1"
+          className="text-2xl flex-1 text-gray-50"
           prefetch="intent"
           to="/"
-          style={activeLinkStyle}
+          style={({isActive}) =>
+            isActive ? {fontWeight: 900} : {fontWeight: 500}
+          }
           end
         >
           {shop.name}
@@ -65,7 +67,10 @@ export function HeaderMenu({
   }
 
   return (
-    <nav role="navigation" className="flex-1 flex items-center justify-evenly">
+    <nav
+      role="navigation"
+      className="flex-1 hidden md:flex items-center justify-evenly text-gray-200 gap-6"
+    >
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
@@ -83,9 +88,11 @@ export function HeaderMenu({
             key={item.id}
             onClick={closeAside}
             prefetch="intent"
-            style={activeLinkStyle}
+            style={({isActive}) =>
+              isActive ? {fontWeight: 500} : {fontWeight: 300}
+            }
             to={url}
-            className="hover:no-underline"
+            className="hover:no-underline hover:brightness-80 transition-all text-lg"
           >
             {item.title}
           </NavLink>
@@ -102,17 +109,17 @@ function HeaderCtas({
   return (
     <nav
       role="navigation"
-      className="flex justify-end items-center gap-4 flex-1"
+      className="flex justify-end items-center gap-4 flex-1 text-gray-50"
     >
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
+      <NavLink prefetch="intent" to="/account">
         <Suspense fallback="Sign in">
           <Await resolve={isLoggedIn} errorElement="Sign in">
             {(isLoggedIn) =>
               isLoggedIn ? (
-                <User2 className="h-6 w-6" />
+                <User2 className="h-6 w-6 hover:text-gray-300 transition-colors" />
               ) : (
-                <LogIn className="h-6 w-6" />
+                <LogIn className="h-6 w-6 hover:text-gray-300 transition-colors" />
               )
             }
           </Await>
@@ -128,7 +135,10 @@ function HeaderCtas({
 function HeaderMenuMobileToggle() {
   const {open} = useAside();
   return (
-    <button onClick={() => open('mobile')}>
+    <button
+      onClick={() => open('mobile')}
+      className="md:hidden text-gray-50 hover:text-gray-300 transition-colors cursor-pointer"
+    >
       <Menu className="h-6 w-6" />
     </button>
   );
@@ -138,7 +148,10 @@ function SearchToggle() {
   const {open} = useAside();
 
   return (
-    <button onClick={() => open('search')}>
+    <button
+      onClick={() => open('search')}
+      className="text-gray-50 cursor-pointer hover:text-gray-300 transition-colors"
+    >
       <Search className="h-6 w-6" />
     </button>
   );
@@ -161,7 +174,7 @@ function CartBadge({count}: {count: number | null}) {
           url: window.location.href || '',
         } as CartViewPayload);
       }}
-      className="relative inline-block"
+      className="relative inline-block text-gray-50 hover:text-gray-300 transition-colors"
     >
       <ShoppingBag className="h-6 w-6" />
       {count !== null && count > 0 ? (
@@ -225,16 +238,3 @@ const FALLBACK_HEADER_MENU = {
     },
   ],
 };
-
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'black',
-  };
-}

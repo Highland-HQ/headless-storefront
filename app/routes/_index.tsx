@@ -6,6 +6,7 @@ import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
+import {ArrowRight} from 'lucide-react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Highland HQ | Home'}];
@@ -72,18 +73,35 @@ function FeaturedCollection({
 }) {
   if (!collection) return null;
   const image = collection?.image;
+
   return (
-    <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
-    >
+    <div className="relative w-full h-[85vh] md:h-full">
       {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
+        <div className="w-full h-full overflow-hidden">
+          <Image
+            data={image}
+            sizes="100vw"
+            className="w-full h-full object-cover"
+          />
         </div>
       )}
-      <h1>{collection.title}</h1>
-    </Link>
+      <div className="absolute inset-0 bg-black/50 text-white">
+        <div className="max-w-layout h-full mx-auto flex flex-col items-start justify-center">
+          <h1 className="text-5xl font-bold mb-8">
+            SHOP OUR {collection.title.toUpperCase()} COLLECTION
+          </h1>
+          <button className="border border-gray-50 px-4 py-2 rounded-md text-gray-50">
+            <Link
+              className="flex items-center font-bold"
+              to={`/collections/${collection.handle}`}
+            >
+              <span>SHOP NOW</span>
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Link>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
