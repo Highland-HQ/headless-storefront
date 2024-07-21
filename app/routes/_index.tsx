@@ -6,17 +6,17 @@ import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
+import {FEATURED_COLLECTION_QUERY} from '~/graphql/collections/FeaturedCollection';
+import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts';
 import {ArrowRight} from 'lucide-react';
+import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Highland HQ | Home'}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   return defer({...deferredData, ...criticalData});
@@ -27,13 +27,14 @@ export async function loader(args: LoaderFunctionArgs) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({context}: LoaderFunctionArgs) {
-  const [{collections}] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY),
-    // Add other queries here, so that they are loaded in parallel
+  const [{collectionByHandle}] = await Promise.all([
+    context.storefront.query(FEATURED_COLLECTION_QUERY, {
+      variables: {handle: FEATURED_COLLECTION_HANDLE},
+    }),
   ]);
 
   return {
-    featuredCollection: collections.nodes[0],
+    featuredCollection: collectionByHandle,
   };
 }
 
@@ -46,7 +47,6 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
   const recommendedProducts = context.storefront
     .query(RECOMMENDED_PRODUCTS_QUERY)
     .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
       console.error(error);
       return null;
     });
@@ -75,20 +75,20 @@ function FeaturedCollection({
   const image = collection?.image;
 
   return (
-    <div className="relative w-full h-[85vh] md:h-full">
+    <div className="relative w-full h-[65vh] md:h-full">
       {image && (
         <div className="w-full h-full overflow-hidden">
           <Image
             data={image}
-            sizes="100vw"
-            className="w-full h-full object-cover"
+            sizes="(min-width: 100vw)"
+            className="w-full h-[85vh] object-cover"
           />
         </div>
       )}
-      <div className="absolute inset-0 bg-black/50 text-white">
+      <div className="absolute inset-0 bg-black/50 text-white px-4 md:px-0">
         <div className="max-w-layout h-full mx-auto flex flex-col items-start justify-center">
-          <h1 className="text-5xl font-bold mb-8">
-            SHOP OUR {collection.title.toUpperCase()} COLLECTION
+          <h1 className="text-3xl md:text-5xl font-bold mb-8">
+            SHOP OUR {collection.title.toUpperCase()}
           </h1>
           <button className="border border-gray-50 px-4 py-2 rounded-md text-gray-50">
             <Link
@@ -144,57 +144,3 @@ function RecommendedProducts({
     </div>
   );
 }
-
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
-    id
-    title
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-    handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...FeaturedCollection
-      }
-    }
-  }
-` as const;
-
-const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
-    id
-    title
-    handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-    images(first: 1) {
-      nodes {
-        id
-        url
-        altText
-        width
-        height
-      }
-    }
-  }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...RecommendedProduct
-      }
-    }
-  }
-` as const;
