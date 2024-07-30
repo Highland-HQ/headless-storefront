@@ -10,6 +10,7 @@ import {FEATURED_COLLECTION_QUERY} from '~/graphql/collections/FeaturedCollectio
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts';
 import {ArrowRight} from 'lucide-react';
 import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
+import {Button} from '~/components/ui/Button';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Highland HQ | Home'}];
@@ -90,7 +91,7 @@ function FeaturedCollection({
           <h1 className="text-3xl md:text-5xl font-bold mb-8">
             SHOP OUR {collection.title.toUpperCase()}
           </h1>
-          <button className="border border-gray-50 px-4 py-2 rounded-md text-gray-50">
+          <Button variant="outline">
             <Link
               className="flex items-center font-bold"
               to={`/collections/${collection.handle}`}
@@ -98,7 +99,7 @@ function FeaturedCollection({
               <span>SHOP NOW</span>
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
-          </button>
+          </Button>
         </div>
       </div>
     </div>
