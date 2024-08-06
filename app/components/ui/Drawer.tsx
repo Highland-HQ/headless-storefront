@@ -39,7 +39,12 @@ export const Drawer = ({
 
   return (
     <>
-      <Button className="inline" onClick={toggleDrawer}>
+      <Button
+        className="inline"
+        variant="ghost"
+        size="small"
+        onClick={toggleDrawer}
+      >
         {toggleIcon}
       </Button>
 
@@ -73,6 +78,8 @@ export const Drawer = ({
             <X className="h-6 w-6" />
           </Button>
         </div>
+
+        <div>{content}</div>
       </motion.div>
     </>
   );

@@ -159,7 +159,7 @@ function SearchResultsProductsGrid({
   searchTerm,
 }: Pick<SearchQuery, 'products'> & {searchTerm: string}) {
   return (
-    <div className="search-result">
+    <div>
       <h2>Products</h2>
       <Pagination connection={products}>
         {({nodes, isLoading, NextLink, PreviousLink}) => {
@@ -170,7 +170,7 @@ function SearchResultsProductsGrid({
             );
 
             return (
-              <div className="search-results-item" key={product.id}>
+              <div key={product.id}>
                 <Link
                   prefetch="intent"
                   to={`/products/${product.handle}${trackingParams}`}
@@ -219,11 +219,11 @@ function SearchResultsProductsGrid({
 
 function SearchResultPageGrid({pages}: Pick<SearchQuery, 'pages'>) {
   return (
-    <div className="search-result">
+    <div>
       <h2>Pages</h2>
       <div>
         {pages?.nodes?.map((page) => (
-          <div className="search-results-item" key={page.id}>
+          <div key={page.id}>
             <Link prefetch="intent" to={`/pages/${page.handle}`}>
               {page.title}
             </Link>
@@ -237,11 +237,11 @@ function SearchResultPageGrid({pages}: Pick<SearchQuery, 'pages'>) {
 
 function SearchResultArticleGrid({articles}: Pick<SearchQuery, 'articles'>) {
   return (
-    <div className="search-result">
+    <div>
       <h2>Articles</h2>
       <div>
         {articles?.nodes?.map((article) => (
-          <div className="search-results-item" key={article.id}>
+          <div key={article.id}>
             <Link prefetch="intent" to={`/blogs/${article.handle}`}>
               {article.title}
             </Link>
@@ -276,7 +276,7 @@ type SearchFromProps = {
 export function PredictiveSearchForm({
   action,
   children,
-  className = 'predictive-search-form',
+  className,
   ...props
 }: SearchFromProps) {
   const params = useParams();
@@ -343,7 +343,7 @@ export function PredictiveSearchResults() {
   }
 
   return (
-    <div className="predictive-search-results">
+    <div>
       <div>
         {results.map(({type, items}) => (
           <PredictiveSearchResult
@@ -401,7 +401,7 @@ function PredictiveSearchResult({
   }&type=${pluralToSingularSearchType(type)}`;
 
   return (
-    <div className="predictive-search-result" key={type}>
+    <div key={type}>
       <Link prefetch="intent" to={categoryUrl} onClick={goToSearchResult}>
         <h5>{isSuggestions ? 'Suggestions' : type}</h5>
       </Link>
@@ -424,7 +424,7 @@ type SearchResultItemProps = Pick<SearchResultTypeProps, 'goToSearchResult'> & {
 
 function SearchResultItem({goToSearchResult, item}: SearchResultItemProps) {
   return (
-    <li className="predictive-search-result-item" key={item.id}>
+    <li key={item.id}>
       <Link onClick={goToSearchResult} to={item.url}>
         {item.image?.url && (
           <Image

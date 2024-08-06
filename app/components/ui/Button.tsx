@@ -6,7 +6,7 @@ type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost';
 
 interface ButtonProps {
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: any;
   type?: ButtonType;
   size?: ButtonSize;
   variant?: ButtonVariant;
@@ -28,7 +28,7 @@ const variantClasses = {
     'bg-red-600 hover:bg-red-800 text-gray-50 font-semibold transition-all',
   outline:
     'border border-gray-50 text-gray-50 hover:bg-gray-50/20 transition-all',
-  ghost: 'text-50 bg-none hover:bg-gray-500/50 transition-all',
+  ghost: 'text-50 bg-none hover:bg-gray-50/20 transition-all',
 };
 
 export const Button = ({

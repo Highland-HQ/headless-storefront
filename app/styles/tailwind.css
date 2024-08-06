@@ -6,6 +6,10 @@
 @import 'tailwindcss';
 
 @theme {
+  --default-font-family: var(--font-family-sans);
+
+  --font-family-sans: 'Roboto Slab';
+
   --width-layout: 100rem;
 
   --color-primary: #bc9e82;

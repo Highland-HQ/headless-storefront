@@ -32,10 +32,7 @@ export function PageLayout({
   publicStoreDomain,
 }: PageLayoutProps) {
   return (
-    <Aside.Provider>
-      <CartAside cart={cart} />
-      <SearchAside />
-      <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
+    <>
       {header && (
         <Header
           header={header}
@@ -50,7 +47,7 @@ export function PageLayout({
         header={header}
         publicStoreDomain={publicStoreDomain}
       />
-    </Aside.Provider>
+    </>
   );
 }
 
@@ -68,41 +65,6 @@ function CartAside({cart}: {cart: PageLayoutProps['cart']}) {
   );
 }
 
-function SearchAside() {
-  return (
-    <Aside type="search" heading="SEARCH">
-      <div className="predictive-search">
-        <br />
-        <PredictiveSearchForm>
-          {({fetchResults, inputRef}) => (
-            <div>
-              <input
-                name="q"
-                onChange={fetchResults}
-                onFocus={fetchResults}
-                placeholder="Search"
-                ref={inputRef}
-                type="search"
-              />
-              &nbsp;
-              <button
-                onClick={() => {
-                  window.location.href = inputRef?.current?.value
-                    ? `/search?q=${inputRef.current.value}`
-                    : `/search`;
-                }}
-              >
-                Search
-              </button>
-            </div>
-          )}
-        </PredictiveSearchForm>
-        <PredictiveSearchResults />
-      </div>
-    </Aside>
-  );
-}
-
 function MobileMenuAside({
   header,
   publicStoreDomain,
@@ -116,7 +78,6 @@ function MobileMenuAside({
       <Aside type="mobile" heading="MENU">
         <HeaderMenu
           menu={header.menu}
-          viewport="mobile"
           primaryDomainUrl={header.shop.primaryDomain.url}
           publicStoreDomain={publicStoreDomain}
         />
