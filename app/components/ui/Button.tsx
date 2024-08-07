@@ -11,6 +11,7 @@ interface ButtonProps {
   size?: ButtonSize;
   variant?: ButtonVariant;
   className?: string;
+  disabled?: boolean;
 }
 
 const sizeClasses = {
@@ -23,7 +24,7 @@ const variantClasses = {
   primary:
     'bg-primary hover:bg-primary/75 text-black font-semibold transition-all',
   secondary:
-    'bg-white hover:bg-primary/75 text-black font-semibold transition-all',
+    'bg-secondary hover:bg-secondary/75 text-gray-50 font-semibold transition-all',
   danger:
     'bg-red-600 hover:bg-red-800 text-gray-50 font-semibold transition-all',
   outline:
@@ -38,12 +39,14 @@ export const Button = ({
   size = 'medium',
   variant = 'primary',
   className = '',
+  disabled,
 }: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`flex items-center justify-center rounded ${
+      disabled={disabled}
+      className={`flex items-center justify-center rounded hover:cursor-pointer ${
         sizeClasses[size as ButtonSize]
       } ${variantClasses[variant as ButtonVariant]} ${className}`}
     >

@@ -8,7 +8,7 @@ import type {
 } from 'storefrontapi.generated';
 import {FEATURED_COLLECTION_QUERY} from '~/graphql/collections/FeaturedCollection';
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts';
-import {ArrowRight} from 'lucide-react';
+import {ArrowBigRight, ArrowRight} from 'lucide-react';
 import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
 import {Button} from '~/components/ui/Button';
 
@@ -86,7 +86,7 @@ function FeaturedCollection({
           />
         </div>
       )}
-      <div className="absolute inset-0 bg-black/50 text-white px-4 md:px-0">
+      <div className="shadow-2xl absolute inset-0 bg-black/50 text-white px-4 md:px-0">
         <div className="max-w-layout h-full mx-auto flex flex-col items-start justify-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-8">
             SHOP OUR {collection.title.toUpperCase()}
@@ -112,26 +112,46 @@ function RecommendedProducts({
   products: Promise<RecommendedProductsQuery | null>;
 }) {
   return (
-    <div className="recommended-products">
-      <h2>Recommended Products</h2>
+    <div className="my-12 mx-auto max-w-layout px-4 md:px-0">
+      <div className="flex flex-col my-4 md:flex-row items-start md:items-center justify-between">
+        <h2 className="text-xl md:text-3xl font-semibold">
+          RECOMMENDED PRODUCTS
+        </h2>
+
+        <Button
+          size="medium"
+          variant="ghost"
+          className="px-0! md:px-4 tracking-widest"
+        >
+          <Link
+            to="collections/august-collection"
+            className="flex items-center "
+          >
+            See More <ArrowRight className="h-4 w-4 ml-2" />
+          </Link>
+        </Button>
+      </div>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
-            <div className="recommended-products-grid">
+            <div className="grid gap-6 grid-cols-2 md:grid-cols-4">
               {response
                 ? response.products.nodes.map((product) => (
                     <Link
                       key={product.id}
-                      className="recommended-product"
                       to={`/products/${product.handle}`}
+                      className="hover:scale-[0.99] transition-all"
                     >
                       <Image
+                        className="rounded shadow"
                         data={product.images.nodes[0]}
-                        aspectRatio="1/1"
+                        aspectRatio="2/3"
                         sizes="(min-width: 45em) 20vw, 50vw"
                       />
-                      <h4>{product.title}</h4>
-                      <small>
+                      <h4 className="text-lg font-semibold tracking-wide">
+                        {product.title}
+                      </h4>
+                      <small className="text-base tracking-widest">
                         <Money data={product.priceRange.minVariantPrice} />
                       </small>
                     </Link>

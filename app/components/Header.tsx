@@ -46,7 +46,7 @@ export function Header({
     <header
       className={`w-screen top-0 z-50 ${
         scrolled
-          ? 'fixed bg-primary text-gray-900'
+          ? 'fixed bg-primary text-gray-900 shadow'
           : 'absolute bg-transparent text-gray-50'
       }`}
     >
@@ -58,7 +58,7 @@ export function Header({
             publicStoreDomain={publicStoreDomain}
           />
         </nav>
-        <div className="flex-1 grid place-items-center font-semibold">
+        <div className="flex-1 flex items-center justify-start md:justify-center font-semibold">
           <NavLink
             className="text-2xl text-inherit tracking-wider"
             prefetch="intent"
@@ -85,7 +85,7 @@ export function Header({
               ease: 'anticipate',
               duration: 0.5,
             }}
-            className="fixed top-0 left-0 w-full h-screen bg-primary text-gray-50 p-4 z-40 md:hidden"
+            className="fixed top-0 left-0 w-full h-screen bg-primary text-gray-900 p-4 z-40 md:hidden"
           >
             <div className="flex justify-end">
               <Button
@@ -135,7 +135,7 @@ export function HeaderMenu({
             key={item.id}
             prefetch="intent"
             to={url}
-            className="px-2 hover:bg-gray-50/20 md:rounded hover:no-underline transition-all text-xl md:text-lg border-b border-gray-50 md:border-none py-4 md:py-1"
+            className="px-2 hover:bg-gray-50/20 md:rounded hover:no-underline transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1"
           >
             {item.title}
           </NavLink>
@@ -190,27 +190,30 @@ function SearchToggle() {
   return (
     <Drawer
       content={
-        <div className="p-4">
+        <div className="px-4">
           <PredictiveSearchForm>
             {({fetchResults, inputRef}) => (
-              <div>
+              <div className="flex flex-col md:flex-row gap-4">
                 <input
                   name="q"
                   onChange={fetchResults}
                   onFocus={fetchResults}
-                  placeholder="SEARCH HIGHLAND HQ"
+                  placeholder="SEARCH FOR..."
                   ref={inputRef}
                   type="search"
-                  className="w-full py-5 px-2 rounded-lg"
+                  className="w-full py-3 px-6 text-lg rounded"
                 />
                 <Button
+                  variant="ghost"
+                  size="large"
                   onClick={() => {
                     window.location.href = inputRef?.current?.value
                       ? `/search?q=${inputRef.current.value}`
                       : `/search`;
                   }}
                 >
-                  Search
+                  <span>SEARCH</span>
+                  <Search className="h-4 w-4 ml-2" />
                 </Button>
               </div>
             )}
@@ -243,10 +246,10 @@ function CartBadge({count}: {count: number | null}) {
         } as CartViewPayload);
       }}
     >
-      <a href="/cart">
+      <a href="/cart" className="relative inline-block">
         <ShoppingBag className="h-6 w-6" />
         {count !== null && count > 0 ? (
-          <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 h-3 w-3 bg-red-500 rounded-full" />
+          <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center"></span>
         ) : null}
       </a>
     </Button>

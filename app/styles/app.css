@@ -2,14 +2,8 @@
   box-sizing: border-box;
 }
 
-:root {
-  --aside-width: 400px;
-  --cart-aside-summary-height-with-discount: 300px;
-  --cart-aside-summary-height: 250px;
-  --grid-item-width: 355px;
-  --header-height: 64px;
-  --color-dark: #000;
-  --color-light: #fff;
+body {
+  background-color: var(--color-primary);
 }
 
 @font-face {
@@ -28,118 +22,38 @@
       format('truetype');
 }
 
-/* img {
-  border-radius: 4px;
-} */
-
-/*
-* --------------------------------------------------
-* components/Aside
-* --------------------------------------------------
-*/
-aside {
-  background: var(--color-light);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
-  height: 100vh;
-  max-width: var(--aside-width);
-  min-width: var(--aside-width);
-  position: fixed;
-  right: calc(-1 * var(--aside-width));
-  top: 0;
-  transition: transform 200ms ease-in-out;
+@font-face {
+  font-family: 'Bentinck';
+  src: url('/fonts/bentinck/Bentinck-Regular.ttf'); /* IE9 Compat Modes */
+  src: local(''),
+    url('/fonts/bentinck/Bentinck-Regular.ttf?#iefix') format('truetype'),
+    /* IE6-IE8 */ url('/fonts/bentinck/Bentinck-Regular.ttf') format('truetype'),
+    /* Super Modern Browsers */ url('fonts/bentinck/Bentinck-Regular.ttf')
+      format('truetype'),
+    /* Modern Browsers */ url('fonts/bentinck/Bentinck-Regular.ttf')
+      format('truetype');
 }
 
-aside header {
-  align-items: center;
-  border-bottom: 1px solid var(--color-dark);
-  display: flex;
-  height: var(--header-height);
-  justify-content: space-between;
-  padding: 0 20px;
+@font-face {
+  font-family: 'Roboto Serif';
+  src: url('/fonts/roboto_serif/RobotoSerif.ttf'); /* IE9 Compat Modes */
+  src: local(''),
+    url('/fonts/roboto_serif/RobotoSerif.ttf?#iefix') format('truetype'),
+    /* IE6-IE8 */ url('/fonts/roboto_serif/RobotoSerif.ttf') format('truetype'),
+    /* Super Modern Browsers */ url('fonts/roboto_serif/RobotoSerif.ttf')
+      format('truetype'),
+    /* Modern Browsers */ url('fonts/roboto_serif/RobotoSerif.ttf')
+      format('truetype');
 }
 
-aside header h3 {
-  margin: 0;
-}
-
-aside header .close {
-  font-weight: bold;
-  opacity: 0.8;
-  text-decoration: none;
-  transition: all 200ms;
-  width: 20px;
-}
-
-aside header .close:hover {
-  opacity: 1;
-}
-
-aside header h2 {
-  margin-bottom: 0.6rem;
-  margin-top: 0;
-}
-
-/* aside main {
-  margin: 1rem;
-} */
-
-aside p {
-  margin: 0 0 0.25rem;
-}
-
-aside p:last-child {
-  margin: 0;
-}
-
-aside li {
-  margin-bottom: 0.125rem;
-}
-
-.overlay {
-  background: rgba(0, 0, 0, 0.2);
-  bottom: 0;
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: fixed;
-  right: 0;
-  top: 0;
-  transition: opacity 400ms ease-in-out;
-  transition: opacity 400ms;
-  visibility: hidden;
-  z-index: 10;
-}
-
-.overlay .close-outside {
-  background: transparent;
-  border: none;
-  color: transparent;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: calc(100% - var(--aside-width));
-}
-
-.overlay .light {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.overlay .cancel {
-  cursor: default;
-  height: 100%;
-  position: absolute;
-  width: 100%;
-}
-
-.overlay.expanded {
-  opacity: 1;
-  pointer-events: auto;
-  visibility: visible;
-}
-/* reveal aside */
-.overlay.expanded aside {
-  transform: translateX(calc(var(--aside-width) * -1));
+@font-face {
+  font-family: 'Vantonir';
+  src: url('/fonts/vantonir/vantonir.ttf'); /* IE9 Compat Modes */
+  src: local(''), url('/fonts/vantonir/vantonir.ttf?#iefix') format('truetype'),
+    /* IE6-IE8 */ url('/fonts/vantonir/vantonir.ttf') format('truetype'),
+    /* Super Modern Browsers */ url('fonts/vantonir/vantonir.ttf')
+      format('truetype'),
+    /* Modern Browsers */ url('fonts/vantonir/vantonir.ttf') format('truetype');
 }
 
 button.reset {
@@ -331,43 +245,6 @@ button.reset:hover:not(:has(> *)) {
   flex: row;
   align-items: center;
   gap: 1rem;
-}
-
-/*
-* --------------------------------------------------
-* routes/__index
-* --------------------------------------------------
-*/
-.featured-collection {
-  display: block;
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.featured-collection-image {
-  aspect-ratio: 1 / 1;
-  @media (min-width: 45em) {
-    aspect-ratio: 16 / 9;
-  }
-}
-
-.featured-collection img {
-  height: auto;
-  max-height: 100%;
-  object-fit: cover;
-}
-
-.recommended-products-grid {
-  display: grid;
-  grid-gap: 1.5rem;
-  grid-template-columns: repeat(2, 1fr);
-  @media (min-width: 45em) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.recommended-product img {
-  height: auto;
 }
 
 /*

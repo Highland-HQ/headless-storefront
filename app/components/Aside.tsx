@@ -26,9 +26,6 @@ export function Aside({
   type: AsideType;
   heading: React.ReactNode;
 }) {
-  const {type: activeType, close} = useAside();
-  const expanded = type === activeType;
-
   return (
     <div
       aria-modal

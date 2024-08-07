@@ -17,6 +17,7 @@ import type {
 } from 'storefrontapi.generated';
 
 import type {PredictiveSearchAPILoader} from '../routes/api.predictive-search';
+import {HeartCrack} from 'lucide-react';
 
 type PredicticeSearchResultItemImage =
   | PredictiveCollectionFragment['image']
@@ -376,8 +377,9 @@ function NoPredictiveSearchResults({
     return null;
   }
   return (
-    <p>
+    <p className="text-xl mt-4 flex items-center justify-start">
       No results found for <q>{searchTerm.current}</q>
+      <HeartCrack className="ml-2 h-4 w-4" />
     </p>
   );
 }

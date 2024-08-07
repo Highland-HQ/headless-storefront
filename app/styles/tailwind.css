@@ -8,9 +8,11 @@
 @theme {
   --default-font-family: var(--font-family-sans);
 
-  --font-family-sans: 'Roboto Slab';
+  --font-family-sans: 'Roboto Serif', 'Bentinck', 'Roboto Slab';
 
   --width-layout: 100rem;
 
   --color-primary: #bc9e82;
+  /* --color-primary: #e3c6ac; */
+  --color-secondary: #533f2c;
 }

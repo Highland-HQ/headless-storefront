@@ -1,4 +1,4 @@
-import {ReactNode, useState} from 'react';
+import {ReactNode, useEffect, useState} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 import {X} from 'lucide-react';
 import {Button} from './Button';
@@ -21,6 +21,7 @@ export const Drawer = ({
   toggleIcon,
 }: DrawerProps) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const toggleDrawer = () => {
     setDrawerIsOpen(!drawerIsOpen);
@@ -30,17 +31,37 @@ export const Drawer = ({
     open: {
       width: position === 'right' ? '45rem' : 'calc(100% - 2rem)',
       height: position === 'top' ? 'calc(100% - 2rem)' : 'calc(100% - 2rem)',
+      transition: {duration: 0.5, ease: 'anticipate'},
     },
     closed: {
       width: position === 'right' ? '0' : 'calc(100% - 2rem)',
       height: position === 'top' ? '0' : 'calc(100% - 2rem)',
+      transition: {duration: 0.5, ease: 'anticipate'},
+    },
+    mobileOpen: {
+      width: '100vw',
+      height: position === 'top' ? 'calc(100% - 2rem)' : '100%',
+      transition: {duration: 0.5, ease: 'anticipate'},
     },
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <>
       <Button
-        className="inline"
+        className="inline cursor-pointer"
         variant="ghost"
         size="small"
         onClick={toggleDrawer}
@@ -48,6 +69,7 @@ export const Drawer = ({
         {toggleIcon}
       </Button>
 
+      {/* Darkened Background */}
       <AnimatePresence>
         {drawerIsOpen && (
           <motion.div
@@ -62,17 +84,16 @@ export const Drawer = ({
       </AnimatePresence>
 
       <motion.div
-        initial={'closed'}
-        animate={drawerIsOpen ? 'open' : 'closed'}
+        initial="closed"
+        animate={drawerIsOpen ? (isMobile ? 'mobileOpen' : 'open') : 'closed'}
         variants={variants}
-        transition={{ease: 'anticipate', duration: 0.5}}
-        className={`fixed rounded-lg bg-primary text-gray-950 shadow-lg z-50 overflow-hidden ${
+        className={`fixed rounded-lg bg-primary text-gray-950 shadow-lg z-50 overflow-hidden m-0 ${
           position === 'top'
             ? 'top-0 left-0 right-0'
-            : 'top-0 right-0 bottom-0 m-4'
+            : 'top-0 right-0 bottom-0 md:m-4'
         }`}
       >
-        <div className="flex justify-between items-center p-4 border-b">
+        <div className="flex justify-between items-center p-4">
           <span className="font-bold text-xl uppercase">{header}</span>
           <Button onClick={toggleDrawer} size="small" variant="ghost">
             <X className="h-6 w-6" />
