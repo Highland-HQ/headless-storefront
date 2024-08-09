@@ -142,11 +142,49 @@ export function Header({
   );
 }
 
-const subMenuLinks = [
-  {uri: "/collections/tops/Women's", name: "Women's Tops"},
-  {uri: "/collections/tops/Women's", name: "Women's Tops"},
-  {uri: "/collections/tops/Women's", name: "Women's Tops"},
+const subMenuWomensLinks = [
+  {uri: "/collections/all/Women's", name: 'All Womens'},
+  {uri: "/collections/tops/Women's", name: 'Womens Tops'},
+  {uri: "/collections/bottoms/Women's", name: 'Womens Bottoms'},
 ];
+
+function SubMenuWomens() {
+  return (
+    <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
+      {subMenuWomensLinks.map((link) => (
+        <NavLink
+          prefetch="intent"
+          to={link.uri}
+          className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
+        >
+          {link.name}
+        </NavLink>
+      ))}
+    </div>
+  );
+}
+
+const subMenuMensLinks = [
+  {uri: "/collections/all/Men's", name: 'All Mens'},
+  {uri: "/collections/tops/Men's", name: 'Mens Tops'},
+  {uri: "/collections/bottoms/Men's", name: 'Mens Bottoms'},
+];
+
+function SubMenuMens() {
+  return (
+    <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
+      {subMenuMensLinks.map((link) => (
+        <NavLink
+          prefetch="intent"
+          to={link.uri}
+          className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
+        >
+          {link.name}
+        </NavLink>
+      ))}
+    </div>
+  );
+}
 
 export function HeaderMenu({
   menu,
@@ -161,12 +199,19 @@ export function HeaderMenu({
     <div className="flex-1 tracking-wide flex flex-col md:flex-row md:items-center md:justify-start">
       <Drawer
         position="left"
-        header={'Shop Womens'}
-        content={'sandwich'}
-        desc="sandwich"
+        content={<SubMenuWomens />}
         toggleIcon={
           <div className="flex items-center justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none">
             Womens <ChevronDown className="h-4 w-4 ml-2" />
+          </div>
+        }
+      />
+      <Drawer
+        position="left"
+        content={<SubMenuMens />}
+        toggleIcon={
+          <div className="flex items-center justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none">
+            Mens <ChevronDown className="h-4 w-4 ml-2" />
           </div>
         }
       />
@@ -176,12 +221,6 @@ export function HeaderMenu({
       >
         Womens <ChevronDown className="h-4 w-4 ml-2" />
       </Button> */}
-      <Button
-        variant="ghost"
-        className="px-2 hover:bg-gray-50/20 md:rounded hover:no-underline transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1"
-      >
-        Mens <ChevronDown className="h-4 w-4 ml-2" />
-      </Button>
       {(menu || FALLBACK_HEADER_MENU).items.map((item: any) => {
         if (!item.url) return null;
 

@@ -6,17 +6,17 @@ import {Button} from './Button';
 type DrawerPosition = 'top' | 'right' | 'left';
 
 interface DrawerProps {
-  header: ReactNode;
-  desc: string;
-  position: DrawerPosition;
-  content: ReactNode;
+  header?: ReactNode;
+  desc?: string;
+  position?: DrawerPosition;
+  content?: ReactNode;
   toggleIcon: ReactNode;
 }
 
 export const Drawer = ({
   header,
   desc,
-  position,
+  position = 'left',
   content,
   toggleIcon,
 }: DrawerProps) => {
