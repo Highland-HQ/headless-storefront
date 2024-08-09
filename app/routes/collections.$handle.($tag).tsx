@@ -27,7 +27,7 @@ async function loadCriticalData({
   params,
   request,
 }: LoaderFunctionArgs) {
-  const {handle} = params;
+  const {handle, tag} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 12,
@@ -37,9 +37,11 @@ async function loadCriticalData({
     throw redirect('/collections');
   }
 
+  const filters = tag ? [{tag}] : [];
+
   const [{collection}] = await Promise.all([
     storefront.query(COLLECTION_QUERY, {
-      variables: {handle, ...paginationVariables},
+      variables: {handle, filters, ...paginationVariables},
     }),
   ]);
 
@@ -79,7 +81,7 @@ export default function Collection() {
           </div>
         </>
       ) : (
-        <div className="shadow-2xl inset-0 bg-secondary w-full flex items-end justify-start px-4 pt-24 pb-6 md:p-0">
+        <div className="shadow-2xl inset-0 bg-secondary w-full flex items-end justify-start px-4 pt-24 pb-6 md:px-0 md:pt-32">
           <div className="max-w-layout mx-auto w-full text-gray-50">
             <h1 className="text-4xl font-semibold tracking-wide mb-6">
               {collection.title}
@@ -209,6 +211,7 @@ const COLLECTION_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $filters: [ProductFilter!]
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       id
@@ -223,7 +226,8 @@ const COLLECTION_QUERY = `#graphql
         first: $first,
         last: $last,
         before: $startCursor,
-        after: $endCursor
+        after: $endCursor,
+        filters: $filters
       ) {
         nodes {
           ...ProductItem

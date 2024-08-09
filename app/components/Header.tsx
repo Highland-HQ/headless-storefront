@@ -142,6 +142,12 @@ export function Header({
   );
 }
 
+const subMenuLinks = [
+  {uri: "/collections/tops/Women's", name: "Women's Tops"},
+  {uri: "/collections/tops/Women's", name: "Women's Tops"},
+  {uri: "/collections/tops/Women's", name: "Women's Tops"},
+];
+
 export function HeaderMenu({
   menu,
   primaryDomainUrl,
@@ -154,7 +160,7 @@ export function HeaderMenu({
   return (
     <div className="flex-1 tracking-wide flex flex-col md:flex-row md:items-center md:justify-start">
       <Drawer
-        position="top"
+        position="left"
         header={'Shop Womens'}
         content={'sandwich'}
         desc="sandwich"

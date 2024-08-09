@@ -2,10 +2,6 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
-import type {
-  FeaturedCollectionFragment,
-  RecommendedProductsQuery,
-} from 'storefrontapi.generated';
 import {FEATURED_COLLECTION_QUERY} from '~/graphql/collections/FeaturedCollection';
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts';
 import {ArrowBigRight, ArrowRight} from 'lucide-react';

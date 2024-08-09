@@ -27,15 +27,24 @@ export async function loader(args: LoaderFunctionArgs) {
  * Load data necessary for rendering content above the fold. This is the critical data
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
-async function loadCriticalData({context, request}: LoaderFunctionArgs) {
+async function loadCriticalData({
+  context,
+  request,
+  params,
+}: LoaderFunctionArgs) {
   const {storefront} = context;
+
+  const {tag} = params;
+
+  const query = tag ? `tag:${tag}` : '';
+
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
   });
 
   const [{products}] = await Promise.all([
     storefront.query(CATALOG_QUERY, {
-      variables: {...paginationVariables},
+      variables: {query, ...paginationVariables},
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
@@ -55,35 +64,43 @@ export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
-      <Pagination connection={products}>
-        {({nodes, isLoading, PreviousLink, NextLink}) => (
-          <>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-            </PreviousLink>
-            <ProductsGrid products={nodes} />
-            <br />
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-            </NextLink>
-          </>
-        )}
-      </Pagination>
+    <div>
+      <div className="shadow-2xl inset-0 bg-secondary w-full flex items-end justify-start px-4 pt-24 pb-6 md:px-0 md:pt-32">
+        <div className="max-w-layout mx-auto w-full text-gray-50">
+          <h1 className="text-4xl font-semibold tracking-wide mb-6">
+            Shop All
+          </h1>
+        </div>
+      </div>
+      <div className="mt-12 max-w-layout mx-auto p-4 md:p-0">
+        <Pagination connection={products}>
+          {({nodes, isLoading, PreviousLink, NextLink}) => (
+            <>
+              <PreviousLink>
+                {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+              </PreviousLink>
+              <ProductsGrid products={nodes as any} />
+              <br />
+              <NextLink>
+                {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+              </NextLink>
+            </>
+          )}
+        </Pagination>
+      </div>
     </div>
   );
 }
 
 function ProductsGrid({products}: {products: ProductItemFragment[]}) {
   return (
-    <div className="products-grid">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
       {products.map((product, index) => {
         return (
           <ProductItem
             key={product.id}
             product={product}
-            loading={index < 8 ? 'eager' : undefined}
+            loading={index < 12 ? 'eager' : undefined}
           />
         );
       })}
@@ -101,23 +118,21 @@ function ProductItem({
   const variant = product.variants.nodes[0];
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
+    <Link key={product.id} prefetch="intent" to={variantUrl}>
       {product.featuredImage && (
         <Image
+          className="rounded shadow-sm border border-secondary/10"
           alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
+          aspectRatio="2/3"
           data={product.featuredImage}
           loading={loading}
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h4>{product.title}</h4>
-      <small>
+      <h4 className="text-xl tracking-wide font-semibold mt-2">
+        {product.title}
+      </h4>
+      <small className="text-base tracking-widest">
         <Money data={product.priceRange.minVariantPrice} />
       </small>
     </Link>
@@ -168,8 +183,15 @@ const CATALOG_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $query: String
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+    products(
+      first: $first, 
+      last: $last, 
+      before: $startCursor, 
+      after: $endCursor, 
+      query: $query
+    ) {
       nodes {
         ...ProductItem
       }
