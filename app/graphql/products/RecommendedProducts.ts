@@ -19,9 +19,12 @@ export const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       }
     }
   }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 10, sortKey: BEST_SELLING, reverse: true) {
+  query RecommendedProducts(
+    $country: CountryCode,
+    $language: LanguageCode,
+    $query: String
+  ) @inContext(country: $country, language: $language) {
+    products(first: 10, reverse: true, query: $query) {
       nodes {
         ...RecommendedProduct
       }

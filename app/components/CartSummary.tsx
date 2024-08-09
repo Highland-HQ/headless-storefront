@@ -13,8 +13,8 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
   return (
     <div
       aria-labelledby="cart-summary"
-      className={`p-12 h-full ${
-        layout === 'aside' ? '' : 'max-w-md border rounded-xl'
+      className={`h-full ${
+        layout === 'aside' ? 'pt-6' : 'max-w-md border rounded-xl p-12'
       } w-full border-t `}
     >
       <h4 className="text-2xl font-semibold">Totals</h4>
@@ -45,11 +45,11 @@ function CartCheckoutActions({
 
   return (
     <div className="flex flex-col md:flex-row gap-2">
-      {layout === 'aside' && (
+      {/* {layout === 'aside' && (
         <Button variant="outline" size="large" className="w-full">
           <a href="/cart">View Your Cart</a>
         </Button>
-      )}
+      )} */}
       <Button variant="secondary" size="large" className="w-full">
         <a
           href={checkoutUrl}

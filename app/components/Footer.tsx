@@ -44,7 +44,10 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav role="navigation" className="bg-secondary text-gray-50 py-12 mt-12">
+    <nav
+      role="navigation"
+      className="bg-secondary text-gray-50 py-12 mt-12 p-4 md:px-0"
+    >
       <div className="flex items-center justify-between max-w-layout w-full mx-auto">
         <div>
           <p className="text-2xl font-semibold text-primary">Highland HQ</p>
@@ -88,7 +91,7 @@ function FooterMenu({
           })}
         </div>
       </div>
-      <div className="max-w-layout mx-auto w-full mt-12 mb-4">
+      <div className="max-w-layout mx-auto w-full mt-12">
         <p className="text-primary flex items-center tracking-widest">
           <Copyright className="h-3 w-3 mr-2" /> Highland HQ | Powered By
           Shopify

@@ -16,7 +16,7 @@ import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 
 import {PageLayout} from '~/components/PageLayout';
-import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
+import {FOOTER_QUERY, HEADER_WITH_SUBMENU_QUERY} from '~/lib/fragments';
 
 export type RootLoader = typeof loader;
 
@@ -89,13 +89,13 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
   const {storefront} = context;
 
   const [header] = await Promise.all([
-    storefront.query(HEADER_QUERY, {
+    storefront.query(HEADER_WITH_SUBMENU_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
         headerMenuHandle: 'main-menu', // Adjust to your header menu handle
+        submenuHandle: 'submenu-handle',
       },
     }),
-    // Add other queries here, so that they are loaded in parallel
   ]);
 
   return {

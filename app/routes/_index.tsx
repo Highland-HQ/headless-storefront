@@ -2,10 +2,6 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
-import type {
-  FeaturedCollectionFragment,
-  RecommendedProductsQuery,
-} from 'storefrontapi.generated';
 import {FEATURED_COLLECTION_QUERY} from '~/graphql/collections/FeaturedCollection';
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts';
 import {ArrowBigRight, ArrowRight} from 'lucide-react';
@@ -45,8 +41,14 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
 function loadDeferredData({context}: LoaderFunctionArgs) {
+  const query = 'tag:Recommended'; // Set the query to filter by the 'Recommended' tag
+
   const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
+    .query(RECOMMENDED_PRODUCTS_QUERY, {
+      variables: {
+        query,
+      },
+    })
     .catch((error) => {
       console.error(error);
       return null;
@@ -67,11 +69,7 @@ export default function Homepage() {
   );
 }
 
-function FeaturedCollection({
-  collection,
-}: {
-  collection: FeaturedCollectionFragment;
-}) {
+function FeaturedCollection({collection}: {collection: any}) {
   if (!collection) return null;
   const image = collection?.image;
 
@@ -106,11 +104,7 @@ function FeaturedCollection({
   );
 }
 
-function RecommendedProducts({
-  products,
-}: {
-  products: Promise<RecommendedProductsQuery | null>;
-}) {
+function RecommendedProducts({products}: {products: Promise<any | null>}) {
   return (
     <div className="my-12 mx-auto px-4 md:px-6">
       <div className="flex flex-col my-4 md:flex-row items-start md:items-center justify-between">
@@ -136,7 +130,7 @@ function RecommendedProducts({
           {(response) => (
             <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
               {response
-                ? response.products.nodes.map((product) => (
+                ? response.products.nodes.map((product: any) => (
                     <Link
                       key={product.id}
                       to={`/products/${product.handle}`}

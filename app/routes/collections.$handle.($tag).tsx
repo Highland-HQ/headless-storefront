@@ -15,25 +15,19 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
 };
 
 export async function loader(args: LoaderFunctionArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
 
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   return defer({...deferredData, ...criticalData});
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- */
 async function loadCriticalData({
   context,
   params,
   request,
 }: LoaderFunctionArgs) {
-  const {handle} = params;
+  const {handle, tag} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 12,
@@ -43,10 +37,11 @@ async function loadCriticalData({
     throw redirect('/collections');
   }
 
+  const filters = tag ? [{tag}] : [];
+
   const [{collection}] = await Promise.all([
     storefront.query(COLLECTION_QUERY, {
-      variables: {handle, ...paginationVariables},
-      // Add other queries here, so that they are loaded in parallel
+      variables: {handle, filters, ...paginationVariables},
     }),
   ]);
 
@@ -61,11 +56,6 @@ async function loadCriticalData({
   };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
 function loadDeferredData({context}: LoaderFunctionArgs) {
   return {};
 }
@@ -75,19 +65,31 @@ export default function Collection() {
 
   return (
     <div>
-      <Image
-        data={collection?.image}
-        sizes="(min-width: 100vw)"
-        className="w-full h-[35vh] object-cover"
-      />
-      <div className="shadow-2xl absolute inset-0 bg-black/50 w-full h-[35vh] flex items-end justify-start">
-        <div className="max-w-layout mx-auto w-full text-gray-50">
-          <h1 className="text-4xl font-semibold tracking-wide mb-6">
-            {collection.title}
-          </h1>
+      {collection?.image ? (
+        <>
+          <Image
+            data={collection?.image}
+            sizes="(min-width: 100vw)"
+            className="w-full h-[35vh] object-cover"
+          />
+          <div className="shadow-2xl absolute inset-0 bg-black/50 w-full h-[35vh] flex items-end justify-start">
+            <div className="max-w-layout mx-auto w-full text-gray-50">
+              <h1 className="text-4xl font-semibold tracking-wide mb-6">
+                {collection.title}
+              </h1>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="shadow-2xl inset-0 bg-secondary w-full flex items-end justify-start px-4 pt-24 pb-6 md:px-0 md:pt-32">
+          <div className="max-w-layout mx-auto w-full text-gray-50">
+            <h1 className="text-4xl font-semibold tracking-wide mb-6">
+              {collection.title}
+            </h1>
+          </div>
         </div>
-      </div>
-      <div className="mt-24 max-w-layout mx-auto">
+      )}
+      <div className="mt-12 max-w-layout mx-auto p-4 md:p-0">
         <p>{collection.description}</p>
         <Pagination connection={collection.products}>
           {({nodes, isLoading, PreviousLink, NextLink}) => (
@@ -209,6 +211,7 @@ const COLLECTION_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $filters: [ProductFilter!]
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       id
@@ -223,7 +226,8 @@ const COLLECTION_QUERY = `#graphql
         first: $first,
         last: $last,
         before: $startCursor,
-        after: $endCursor
+        after: $endCursor,
+        filters: $filters
       ) {
         nodes {
           ...ProductItem

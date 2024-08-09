@@ -78,7 +78,7 @@ function CartLineQuantity({
 
   return (
     <div
-      className={`flex gap-6 items-center ${
+      className={`flex flex-col md:flex-row gap-2 md:gap-6 items-start md:items-center ${
         layout === 'aside' ? 'justify-start' : 'justify-center'
       } flex-1`}
     >
@@ -107,7 +107,6 @@ function CartLineQuantity({
           </button>
         </CartLineUpdateButton>
       </div>
-      &nbsp;
       <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
     </div>
   );

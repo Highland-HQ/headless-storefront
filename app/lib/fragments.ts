@@ -129,7 +129,20 @@ const MENU_FRAGMENT = `#graphql
   }
 ` as const;
 
-export const HEADER_QUERY = `#graphql
+export const SUBMENU_QUERY = `#graphql
+  query Submenu(
+    $country: CountryCode
+    $submenuHandle: String!
+    $language: LanguageCode
+  ) @inContext(language: $language, country: $country) {
+    menu(handle: $submenuHandle) {
+      ...Menu
+    }
+  }
+  ${MENU_FRAGMENT}
+` as const;
+
+export const HEADER_WITH_SUBMENU_QUERY = `#graphql
   fragment Shop on Shop {
     id
     name
@@ -148,12 +161,16 @@ export const HEADER_QUERY = `#graphql
   query Header(
     $country: CountryCode
     $headerMenuHandle: String!
+    $submenuHandle: String!
     $language: LanguageCode
   ) @inContext(language: $language, country: $country) {
     shop {
       ...Shop
     }
     menu(handle: $headerMenuHandle) {
+      ...Menu
+    }
+    submenu: menu(handle: $submenuHandle) {
       ...Menu
     }
   }
