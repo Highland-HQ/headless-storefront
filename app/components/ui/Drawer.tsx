@@ -30,12 +30,12 @@ export const Drawer = ({
   const variants = {
     open: {
       width: position === 'right' ? '45rem' : 'calc(100% - 2rem)',
-      height: position === 'top' ? 'calc(100% - 2rem)' : 'calc(100% - 2rem)',
+      height: position === 'top' ? '25rem' : 'calc(100% - 2rem)',
       transition: {duration: 0.5, ease: 'anticipate'},
     },
     closed: {
-      width: position === 'right' ? '0' : 'calc(100% - 2rem)',
-      height: position === 'top' ? '0' : 'calc(100% - 2rem)',
+      width: position === 'right' ? '0px' : 'calc(100% - 2rem)',
+      height: position === 'top' ? '0px' : 'calc(100% - 2rem)',
       transition: {duration: 0.5, ease: 'anticipate'},
     },
     mobileOpen: {
@@ -89,7 +89,7 @@ export const Drawer = ({
         variants={variants}
         className={`fixed rounded-lg bg-primary text-gray-950 shadow-lg z-50 overflow-hidden m-0 ${
           position === 'top'
-            ? 'top-0 left-0 right-0'
+            ? 'top-0 left-0 right-0 md:m-4'
             : 'top-0 right-0 bottom-0 md:m-4'
         }`}
       >
@@ -100,7 +100,9 @@ export const Drawer = ({
           </Button>
         </div>
 
-        <div>{content}</div>
+        <div className="overflow-y-auto max-h-[calc(100vh-10rem)] p-4">
+          {content}
+        </div>
       </motion.div>
     </>
   );

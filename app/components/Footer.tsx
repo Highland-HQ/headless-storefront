@@ -44,7 +44,10 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav role="navigation" className="bg-secondary text-gray-50 py-12 mt-12">
+    <nav
+      role="navigation"
+      className="bg-secondary text-gray-50 py-12 mt-12 p-4 md:p-0"
+    >
       <div className="flex items-center justify-between max-w-layout w-full mx-auto">
         <div>
           <p className="text-2xl font-semibold text-primary">Highland HQ</p>
