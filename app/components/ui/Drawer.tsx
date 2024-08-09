@@ -1,4 +1,4 @@
-import {ReactNode, useEffect, useState} from 'react';
+import {cloneElement, ReactNode, useEffect, useState} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 import {X} from 'lucide-react';
 import {Button} from './Button';
@@ -15,7 +15,6 @@ interface DrawerProps {
 
 export const Drawer = ({
   header,
-  desc,
   position = 'left',
   content,
   toggleIcon,
@@ -26,6 +25,11 @@ export const Drawer = ({
   const toggleDrawer = () => {
     setDrawerIsOpen(!drawerIsOpen);
   };
+
+  // Pass closeBoth (toggleDrawer) to the content
+  const contentWithToggle = cloneElement(content as React.ReactElement, {
+    toggleDrawer,
+  });
 
   const variants = {
     open: {
@@ -109,7 +113,7 @@ export const Drawer = ({
         </div>
 
         <div className="overflow-y-auto max-h-[calc(100vh-10rem)] p-4">
-          {content}
+          {contentWithToggle}
         </div>
       </motion.div>
     </>
