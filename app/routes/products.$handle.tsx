@@ -1,4 +1,4 @@
-import {Suspense, useState} from 'react';
+import {Suspense} from 'react';
 import {defer, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, type MetaFunction} from '@remix-run/react';
 import type {ProductFragment} from 'storefrontapi.generated';
@@ -6,16 +6,13 @@ import {
   getSelectedProductOptions,
   Analytics,
   useOptimisticVariant,
-  Image,
 } from '@shopify/hydrogen';
 import type {SelectedOption} from '@shopify/hydrogen/storefront-api-types';
 import {getVariantUrl} from '~/lib/variants';
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
-
-import ImageGallery from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css';
+import ProductGallery from '~/components/ui/ProductGallery';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: `Highland HQ | ${data?.product.title ?? ''}`}];
@@ -137,13 +134,14 @@ export default function Product() {
     variants,
   );
 
-  const {title, descriptionHtml} = product;
+  const {title, descriptionHtml, images} = product;
 
   return (
     <div className="max-w-layout mx-auto flex gap-12 mt-24">
-      <div className="max-w-[30vw]">
-        <ProductImage image={selectedVariant?.image} />
-      </div>
+      <ProductGallery
+        images={images.nodes}
+        selectedVariantImage={selectedVariant?.image}
+      />
       <div className="flex-1 w-screen md:w-1/2">
         <div>
           <h1 className="text-4xl font-bold mt-4">{title}</h1>
@@ -174,14 +172,11 @@ export default function Product() {
               )}
             </Await>
           </Suspense>
-          <br />
-          <br />
-          <p className="text-2xl font-semibold mb-4">Description</p>
+          <p className="text-2xl font-semibold mb-4 mt-12">Description</p>
           <div
             className="text-xl"
             dangerouslySetInnerHTML={{__html: descriptionHtml}}
           />
-          <br />
         </div>
       </div>
       <Analytics.ProductView
@@ -248,7 +243,7 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
-    images(first: 10) {
+    images(first: 25) {
       nodes {
         url
         altText

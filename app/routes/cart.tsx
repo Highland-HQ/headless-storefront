@@ -7,7 +7,7 @@ import {CartMain} from '~/components/CartMain';
 import type {RootLoader} from '~/root';
 
 export const meta: MetaFunction = () => {
-  return [{title: `Hydrogen | Cart`}];
+  return [{title: `Highland HQ | Your Cart`}];
 };
 
 export async function action({request, context}: ActionFunctionArgs) {
@@ -85,18 +85,21 @@ export default function Cart() {
   if (!rootData) return null;
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
-      <Suspense fallback={<p>Loading cart ...</p>}>
-        <Await
-          resolve={rootData.cart}
-          errorElement={<div>An error occurred</div>}
-        >
-          {(cart) => {
-            return <CartMain layout="page" cart={cart} />;
-          }}
-        </Await>
-      </Suspense>
-    </div>
+    <Suspense fallback={<p>Loading cart ...</p>}>
+      <Await
+        resolve={rootData.cart}
+        errorElement={<div>An error occurred</div>}
+      >
+        {(cart) => {
+          return (
+            <div className="h-screen w-screen flex items-center justify-center">
+              <div className={`min-w-layout mx-auto flex flex-col`}>
+                <CartMain layout="page" cart={cart} />
+              </div>
+            </div>
+          );
+        }}
+      </Await>
+    </Suspense>
   );
 }

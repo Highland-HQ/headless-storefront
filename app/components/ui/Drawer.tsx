@@ -94,7 +94,7 @@ export const Drawer = ({
         }`}
       >
         <div className="flex justify-between items-center p-4">
-          <span className="font-bold text-xl uppercase">{header}</span>
+          <span className="font-bold text-xl">{header}</span>
           <Button onClick={toggleDrawer} size="small" variant="ghost">
             <X className="h-6 w-6" />
           </Button>

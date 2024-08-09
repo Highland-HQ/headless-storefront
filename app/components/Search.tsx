@@ -17,7 +17,8 @@ import type {
 } from 'storefrontapi.generated';
 
 import type {PredictiveSearchAPILoader} from '../routes/api.predictive-search';
-import {HeartCrack} from 'lucide-react';
+import {HeartCrack, MoveRight} from 'lucide-react';
+import {Button} from './ui/Button';
 
 type PredicticeSearchResultItemImage =
   | PredictiveCollectionFragment['image']
@@ -357,12 +358,16 @@ export function PredictiveSearchResults() {
         ))}
       </div>
       {searchTerm.current && (
-        <Link onClick={goToSearchResult} to={`/search?q=${searchTerm.current}`}>
-          <p>
+        <Button variant="ghost" className="mt-2">
+          <Link
+            onClick={goToSearchResult}
+            to={`/search?q=${searchTerm.current}`}
+            className="flex items-center justify-center"
+          >
             View all results for <q>{searchTerm.current}</q>
-            &nbsp; →
-          </p>
-        </Link>
+            <MoveRight className="h-4 w-4 ml-2" />
+          </Link>
+        </Button>
       )}
     </div>
   );
@@ -377,8 +382,8 @@ function NoPredictiveSearchResults({
     return null;
   }
   return (
-    <p className="text-xl mt-4 flex items-center justify-start">
-      No results found for <q>{searchTerm.current}</q>
+    <p className="text-xl mt-4 tracking-wide flex items-center justify-start">
+      No results found for <q>{searchTerm.current}</q>...
       <HeartCrack className="ml-2 h-4 w-4" />
     </p>
   );
@@ -405,7 +410,9 @@ function PredictiveSearchResult({
   return (
     <div key={type}>
       <Link prefetch="intent" to={categoryUrl} onClick={goToSearchResult}>
-        <h5>{isSuggestions ? 'Suggestions' : type}</h5>
+        <h5 className="text-2xl font-semibold uppercase pt-6">
+          {isSuggestions ? 'Suggestions' : type}
+        </h5>
       </Link>
       <ul>
         {items.map((item: NormalizedPredictiveSearchResultItem) => (
@@ -427,13 +434,18 @@ type SearchResultItemProps = Pick<SearchResultTypeProps, 'goToSearchResult'> & {
 function SearchResultItem({goToSearchResult, item}: SearchResultItemProps) {
   return (
     <li key={item.id}>
-      <Link onClick={goToSearchResult} to={item.url}>
+      <Link
+        onClick={goToSearchResult}
+        to={item.url}
+        className="pt-6 flex gap-4"
+      >
         {item.image?.url && (
           <Image
             alt={item.image.altText ?? ''}
             src={item.image.url}
-            width={50}
-            height={50}
+            width={75}
+            height={75}
+            className="rounded shadow border border-secondary/10"
           />
         )}
         <div>
@@ -444,12 +456,10 @@ function SearchResultItem({goToSearchResult, item}: SearchResultItemProps) {
               }}
             />
           ) : (
-            <span>{item.title}</span>
+            <span className="text-lg font-semibold">{item.title}</span>
           )}
           {item?.price && (
-            <small>
-              <Money data={item.price} />
-            </small>
+            <Money className="text-base tracking-widest" data={item.price} />
           )}
         </div>
       </Link>

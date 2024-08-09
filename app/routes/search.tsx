@@ -5,7 +5,7 @@ import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {SearchForm, SearchResults, NoSearchResults} from '~/components/Search';
 
 export const meta: MetaFunction = () => {
-  return [{title: `Hydrogen | Search`}];
+  return [{title: `Highland HQ | Search`}];
 };
 
 export async function loader({request, context}: LoaderFunctionArgs) {
@@ -51,20 +51,20 @@ export default function SearchPage() {
   const {searchTerm, searchResults} = useLoaderData<typeof loader>();
 
   return (
-    <div className="search">
-      <h1>Search</h1>
-      <SearchForm searchTerm={searchTerm} />
-      {!searchTerm || !searchResults.totalResults ? (
-        <NoSearchResults />
-      ) : (
-        <SearchResults
-          results={searchResults.results}
-          searchTerm={searchTerm}
-        />
-      )}
-      <Analytics.SearchView
-        data={{searchTerm, searchResults}}
-      />
+    <div className="max-w-layout w-full mx-auto mt-24 min-h-screen">
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-semibold">Search</h1>
+        <SearchForm searchTerm={searchTerm} />
+        {!searchTerm || !searchResults.totalResults ? (
+          <NoSearchResults />
+        ) : (
+          <SearchResults
+            results={searchResults.results}
+            searchTerm={searchTerm}
+          />
+        )}
+      </div>
+      <Analytics.SearchView data={{searchTerm, searchResults}} />
     </div>
   );
 }

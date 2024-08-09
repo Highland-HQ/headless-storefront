@@ -91,7 +91,7 @@ function FeaturedCollection({
           <h1 className="text-3xl md:text-5xl font-bold mb-8">
             SHOP OUR {collection.title.toUpperCase()}
           </h1>
-          <Button variant="outline">
+          <Button variant="primary">
             <Link
               className="flex items-center font-bold"
               to={`/collections/${collection.handle}`}
@@ -112,7 +112,7 @@ function RecommendedProducts({
   products: Promise<RecommendedProductsQuery | null>;
 }) {
   return (
-    <div className="my-12 mx-auto max-w-layout px-4 md:px-0">
+    <div className="my-12 mx-auto px-4 md:px-6">
       <div className="flex flex-col my-4 md:flex-row items-start md:items-center justify-between">
         <h2 className="text-xl md:text-3xl font-semibold">
           RECOMMENDED PRODUCTS
@@ -125,7 +125,7 @@ function RecommendedProducts({
         >
           <Link
             to="collections/august-collection"
-            className="flex items-center "
+            className="flex items-center"
           >
             See More <ArrowRight className="h-4 w-4 ml-2" />
           </Link>
@@ -134,7 +134,7 @@ function RecommendedProducts({
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
-            <div className="grid gap-6 grid-cols-2 md:grid-cols-4">
+            <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
               {response
                 ? response.products.nodes.map((product) => (
                     <Link

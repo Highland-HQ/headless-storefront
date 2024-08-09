@@ -1,5 +1,5 @@
 import {Suspense, useEffect, useState} from 'react';
-import {Await, NavLink} from '@remix-run/react';
+import {Await, NavLink, useLocation} from '@remix-run/react';
 import {type CartViewPayload, useAnalytics} from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
 import {LogIn, Menu, Search, ShoppingBag, User2, X} from 'lucide-react';
@@ -8,6 +8,7 @@ import {AnimatePresence} from 'framer-motion';
 import {motion} from 'framer-motion';
 import {Drawer} from './ui/Drawer';
 import {PredictiveSearchForm, PredictiveSearchResults} from './Search';
+import {CartMain} from './CartMain';
 
 interface HeaderProps {
   header: HeaderQuery;
@@ -16,6 +17,12 @@ interface HeaderProps {
   publicStoreDomain: string;
 }
 
+const pathColorMapping: Record<string, string> = {
+  '/': 'text-gray-50',
+  '/collections': 'text-gray-900',
+  '/collections/*': 'text-gray-50',
+};
+
 export function Header({
   header,
   isLoggedIn,
@@ -23,9 +30,11 @@ export function Header({
   publicStoreDomain,
 }: HeaderProps) {
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [menuOpen, setMenuOpen] = useState<boolean>(false); // State to manage menu visibility
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   const {shop, menu} = header;
+
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,13 +51,23 @@ export function Header({
     };
   }, []);
 
+  const getHeaderTextClass = () => {
+    for (const path in pathColorMapping) {
+      const regex = new RegExp(`^${path.replace('*', '.*')}$`);
+      if (regex.test(location.pathname)) {
+        return pathColorMapping[path];
+      }
+    }
+    return 'text-gray-900';
+  };
+
   return (
     <header
       className={`w-screen top-0 z-50 ${
         scrolled
-          ? 'fixed bg-primary text-gray-900 shadow'
+          ? 'fixed bg-secondary text-gray-50 shadow'
           : 'absolute bg-transparent text-gray-50'
-      }`}
+      } ${getHeaderTextClass()}`}
     >
       <div className="max-w-layout mx-auto flex items-center justify-center py-4 px-4 lg:px-0">
         <nav className="hidden md:flex flex-1">
@@ -219,7 +238,9 @@ function SearchToggle() {
             )}
           </PredictiveSearchForm>
 
-          <PredictiveSearchResults />
+          <div className="mt-6">
+            <PredictiveSearchResults />
+          </div>
         </div>
       }
       desc="desc"
@@ -234,25 +255,36 @@ function CartBadge({count}: {count: number | null}) {
   const {publish, shop, cart, prevCart} = useAnalytics();
 
   return (
-    <Button
-      variant="ghost"
-      size="small"
-      onClick={() => {
-        publish('cart_viewed', {
-          cart,
-          prevCart,
-          shop,
-          url: window.location.href || '',
-        } as CartViewPayload);
-      }}
-    >
-      <a href="/cart" className="relative inline-block">
-        <ShoppingBag className="h-6 w-6" />
-        {count !== null && count > 0 ? (
-          <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center"></span>
-        ) : null}
-      </a>
-    </Button>
+    <Drawer
+      desc="Tax and Shipping Calculated at Checkout."
+      position="right"
+      header={
+        <div className="flex gap-2 items-center justify-center">
+          <p className="text-2xl font-semibold">
+            {count} Item{count && count > 1 ? 's' : ''}
+          </p>
+        </div>
+      }
+      content={<CartMain cart={cart} layout="aside" />}
+      toggleIcon={
+        <div
+          className="relative"
+          onClick={() => {
+            publish('cart_viewed', {
+              cart,
+              prevCart,
+              shop,
+              url: window.location.href || '',
+            } as CartViewPayload);
+          }}
+        >
+          <ShoppingBag className="h-6 w-6" />
+          {count !== null && count > 0 ? (
+            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center"></span>
+          ) : null}
+        </div>
+      }
+    />
   );
 }
 
