@@ -1,11 +1,12 @@
 import {Link} from '@remix-run/react';
 import {type VariantOption, VariantSelector} from '@shopify/hydrogen';
+import {ShoppingBasket} from 'lucide-react';
 import type {
   ProductFragment,
   ProductVariantFragment,
 } from 'storefrontapi.generated';
 import {AddToCartButton} from '~/components/AddToCartButton';
-import {useAside} from '~/components/Aside';
+import {Button} from './ui/Button';
 
 export function ProductForm({
   product,
@@ -16,9 +17,8 @@ export function ProductForm({
   selectedVariant: ProductFragment['selectedVariant'];
   variants: Array<ProductVariantFragment>;
 }) {
-  const {open} = useAside();
   return (
-    <div className="product-form">
+    <div>
       <VariantSelector
         handle={product.handle}
         options={product.options.filter((option) => option.values.length > 1)}
@@ -26,12 +26,8 @@ export function ProductForm({
       >
         {({option}) => <ProductOptions key={option.name} option={option} />}
       </VariantSelector>
-      <br />
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => {
-          open('cart');
-        }}
         lines={
           selectedVariant
             ? [
@@ -44,7 +40,14 @@ export function ProductForm({
             : []
         }
       >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        {selectedVariant?.availableForSale ? (
+          <>
+            <span>Add to cart</span>
+            <ShoppingBasket className="h-6 w-6 ml-2" />
+          </>
+        ) : (
+          'Sold out'
+        )}
       </AddToCartButton>
     </div>
   );
@@ -53,24 +56,22 @@ export function ProductForm({
 function ProductOptions({option}: {option: VariantOption}) {
   return (
     <div className="product-options" key={option.name}>
-      <h5>{option.name}</h5>
+      <h5 className="text-2xl font-semibold mb-2">{option.name}</h5>
       <div className="product-options-grid">
         {option.values.map(({value, isAvailable, isActive, to}) => {
           return (
-            <Link
-              className="product-options-item"
-              key={option.name + value}
-              prefetch="intent"
-              preventScrollReset
-              replace
-              to={to}
-              style={{
-                border: isActive ? '1px solid black' : '1px solid transparent',
-                opacity: isAvailable ? 1 : 0.3,
-              }}
-            >
-              {value}
-            </Link>
+            <Button variant={isActive ? 'secondary' : 'ghost'} size="small">
+              <Link
+                className="product-options-item"
+                key={option.name + value}
+                prefetch="intent"
+                preventScrollReset
+                replace
+                to={to}
+              >
+                {value}
+              </Link>
+            </Button>
           );
         })}
       </div>

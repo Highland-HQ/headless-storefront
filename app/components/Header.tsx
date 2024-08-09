@@ -1,9 +1,14 @@
-import {Suspense} from 'react';
-import {Await, NavLink} from '@remix-run/react';
+import {Suspense, useEffect, useState} from 'react';
+import {Await, NavLink, useLocation} from '@remix-run/react';
 import {type CartViewPayload, useAnalytics} from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
-import {useAside} from '~/components/Aside';
-import {Menu} from 'lucide-react';
+import {LogIn, Menu, Search, ShoppingBag, User2, X} from 'lucide-react';
+import {Button} from './ui/Button';
+import {AnimatePresence} from 'framer-motion';
+import {motion} from 'framer-motion';
+import {Drawer} from './ui/Drawer';
+import {PredictiveSearchForm, PredictiveSearchResults} from './Search';
+import {CartMain} from './CartMain';
 
 interface HeaderProps {
   header: HeaderQuery;
@@ -12,7 +17,11 @@ interface HeaderProps {
   publicStoreDomain: string;
 }
 
-type Viewport = 'desktop' | 'mobile';
+const pathColorMapping: Record<string, string> = {
+  '/': 'text-gray-50',
+  '/collections': 'text-gray-900',
+  '/collections/*': 'text-gray-50',
+};
 
 export function Header({
   header,
@@ -20,19 +29,101 @@ export function Header({
   cart,
   publicStoreDomain,
 }: HeaderProps) {
+  const [scrolled, setScrolled] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+
   const {shop, menu} = header;
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 250) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const getHeaderTextClass = () => {
+    for (const path in pathColorMapping) {
+      const regex = new RegExp(`^${path.replace('*', '.*')}$`);
+      if (regex.test(location.pathname)) {
+        return pathColorMapping[path];
+      }
+    }
+    return 'text-gray-900';
+  };
+
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>
-      <HeaderMenu
-        menu={menu}
-        viewport="desktop"
-        primaryDomainUrl={header.shop.primaryDomain.url}
-        publicStoreDomain={publicStoreDomain}
-      />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+    <header
+      className={`w-screen top-0 z-50 ${
+        scrolled
+          ? 'fixed bg-secondary text-gray-50 shadow'
+          : 'absolute bg-transparent text-gray-50'
+      } ${getHeaderTextClass()}`}
+    >
+      <div className="max-w-layout mx-auto flex items-center justify-center py-4 px-4 lg:px-0">
+        <nav className="hidden md:flex flex-1">
+          <HeaderMenu
+            menu={menu}
+            primaryDomainUrl={header.shop.primaryDomain.url}
+            publicStoreDomain={publicStoreDomain}
+          />
+        </nav>
+        <div className="flex-1 flex items-center justify-start md:justify-center font-semibold">
+          <NavLink
+            className="text-2xl text-inherit tracking-wider"
+            prefetch="intent"
+            to="/"
+            end
+          >
+            {shop.name}
+          </NavLink>
+        </div>
+        <HeaderCtas
+          isLoggedIn={isLoggedIn}
+          cart={cart}
+          onMenuToggle={() => setMenuOpen(!menuOpen)}
+        />
+      </div>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            initial={{y: '-100%'}}
+            animate={{y: 0}}
+            exit={{y: '-100%'}}
+            transition={{
+              ease: 'anticipate',
+              duration: 0.5,
+            }}
+            className="fixed top-0 left-0 w-full h-screen bg-primary text-gray-900 p-4 z-40 md:hidden"
+          >
+            <div className="flex justify-end">
+              <Button
+                variant="ghost"
+                size="small"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+            <HeaderMenu
+              menu={menu}
+              primaryDomainUrl={header.shop.primaryDomain.url}
+              publicStoreDomain={publicStoreDomain}
+            />
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
@@ -40,128 +131,160 @@ export function Header({
 export function HeaderMenu({
   menu,
   primaryDomainUrl,
-  viewport,
   publicStoreDomain,
 }: {
   menu: HeaderProps['header']['menu'];
   primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url'];
-  viewport: Viewport;
   publicStoreDomain: HeaderProps['publicStoreDomain'];
 }) {
-  const className = `header-menu-${viewport}`;
-
-  function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
-    if (viewport === 'mobile') {
-      event.preventDefault();
-      window.location.href = event.currentTarget.href;
-    }
-  }
-
   return (
-    <nav className={className} role="navigation">
-      {viewport === 'mobile' && (
-        <NavLink
-          end
-          onClick={closeAside}
-          prefetch="intent"
-          style={activeLinkStyle}
-          to="/"
-        >
-          Home
-        </NavLink>
-      )}
+    <div className="flex-1 tracking-wide flex flex-col md:flex-row md:items-center md:justify-start">
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
-        // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
           item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
             : item.url;
+
         return (
           <NavLink
-            className="header-menu-item"
-            end
             key={item.id}
-            onClick={closeAside}
             prefetch="intent"
-            style={activeLinkStyle}
             to={url}
+            className="px-2 hover:bg-gray-50/20 md:rounded hover:no-underline transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1"
           >
             {item.title}
           </NavLink>
         );
       })}
-    </nav>
+    </div>
   );
 }
 
 function HeaderCtas({
   isLoggedIn,
   cart,
-}: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
+  onMenuToggle,
+}: Pick<HeaderProps, 'isLoggedIn' | 'cart'> & {onMenuToggle: () => void}) {
   return (
-    <nav className="header-ctas" role="navigation">
-      <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
-        <Suspense fallback="Sign in">
-          <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
-          </Await>
-        </Suspense>
-      </NavLink>
+    <nav
+      role="navigation"
+      className="flex justify-end items-center gap-1 flex-1 text-inherit"
+    >
+      <Button
+        variant="ghost"
+        size="small"
+        className="md:hidden"
+        onClick={onMenuToggle}
+      >
+        <Menu className="h-6 w-6" />
+      </Button>
+
+      <Button variant="ghost" size="small">
+        <NavLink prefetch="intent" to="/account">
+          <Suspense fallback="Sign in">
+            <Await resolve={isLoggedIn} errorElement="Sign in">
+              {(isLoggedIn) =>
+                isLoggedIn ? (
+                  <User2 className="h-6 w-6" />
+                ) : (
+                  <LogIn className="h-6 w-6" />
+                )
+              }
+            </Await>
+          </Suspense>
+        </NavLink>
+      </Button>
+
       <SearchToggle />
       <CartToggle cart={cart} />
     </nav>
   );
 }
 
-function HeaderMenuMobileToggle() {
-  const {open} = useAside();
-  return (
-    <button
-      className="header-menu-mobile-toggle reset"
-      onClick={() => open('mobile')}
-    >
-      <h3>
-        <Menu className="h-4 w-4" />
-      </h3>
-    </button>
-  );
-}
-
 function SearchToggle() {
-  const {open} = useAside();
-
   return (
-    <button className="reset" onClick={() => open('search')}>
-      Search
-    </button>
+    <Drawer
+      content={
+        <div className="px-4">
+          <PredictiveSearchForm>
+            {({fetchResults, inputRef}) => (
+              <div className="flex flex-col md:flex-row gap-4">
+                <input
+                  name="q"
+                  onChange={fetchResults}
+                  onFocus={fetchResults}
+                  placeholder="SEARCH FOR..."
+                  ref={inputRef}
+                  type="search"
+                  className="w-full py-3 px-6 text-lg rounded"
+                />
+                <Button
+                  variant="ghost"
+                  size="large"
+                  onClick={() => {
+                    window.location.href = inputRef?.current?.value
+                      ? `/search?q=${inputRef.current.value}`
+                      : `/search`;
+                  }}
+                >
+                  <span>SEARCH</span>
+                  <Search className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            )}
+          </PredictiveSearchForm>
+
+          <div className="mt-6">
+            <PredictiveSearchResults />
+          </div>
+        </div>
+      }
+      desc="desc"
+      header={<h1>Search</h1>}
+      position="right"
+      toggleIcon={<Search className="h-6 w-6" />}
+    />
   );
 }
 
 function CartBadge({count}: {count: number | null}) {
-  const {open} = useAside();
   const {publish, shop, cart, prevCart} = useAnalytics();
 
   return (
-    <a
-      href="/cart"
-      onClick={(e) => {
-        e.preventDefault();
-        open('cart');
-        publish('cart_viewed', {
-          cart,
-          prevCart,
-          shop,
-          url: window.location.href || '',
-        } as CartViewPayload);
-      }}
-    >
-      Cart {count === null ? <span>&nbsp;</span> : count}
-    </a>
+    <Drawer
+      desc="Tax and Shipping Calculated at Checkout."
+      position="right"
+      header={
+        <div className="flex gap-2 items-center justify-center">
+          <p className="text-2xl font-semibold">
+            {count} Item{count && count > 1 ? 's' : ''}
+          </p>
+        </div>
+      }
+      content={<CartMain cart={cart} layout="aside" />}
+      toggleIcon={
+        <div
+          className="relative"
+          onClick={() => {
+            publish('cart_viewed', {
+              cart,
+              prevCart,
+              shop,
+              url: window.location.href || '',
+            } as CartViewPayload);
+          }}
+        >
+          <ShoppingBag className="h-6 w-6" />
+          {count !== null && count > 0 ? (
+            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center"></span>
+          ) : null}
+        </div>
+      }
+    />
   );
 }
 
@@ -219,16 +342,3 @@ const FALLBACK_HEADER_MENU = {
     },
   ],
 };
-
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'black',
-  };
-}

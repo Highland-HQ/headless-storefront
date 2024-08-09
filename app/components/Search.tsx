@@ -17,6 +17,8 @@ import type {
 } from 'storefrontapi.generated';
 
 import type {PredictiveSearchAPILoader} from '../routes/api.predictive-search';
+import {HeartCrack, MoveRight} from 'lucide-react';
+import {Button} from './ui/Button';
 
 type PredicticeSearchResultItemImage =
   | PredictiveCollectionFragment['image']
@@ -159,7 +161,7 @@ function SearchResultsProductsGrid({
   searchTerm,
 }: Pick<SearchQuery, 'products'> & {searchTerm: string}) {
   return (
-    <div className="search-result">
+    <div>
       <h2>Products</h2>
       <Pagination connection={products}>
         {({nodes, isLoading, NextLink, PreviousLink}) => {
@@ -170,7 +172,7 @@ function SearchResultsProductsGrid({
             );
 
             return (
-              <div className="search-results-item" key={product.id}>
+              <div key={product.id}>
                 <Link
                   prefetch="intent"
                   to={`/products/${product.handle}${trackingParams}`}
@@ -219,11 +221,11 @@ function SearchResultsProductsGrid({
 
 function SearchResultPageGrid({pages}: Pick<SearchQuery, 'pages'>) {
   return (
-    <div className="search-result">
+    <div>
       <h2>Pages</h2>
       <div>
         {pages?.nodes?.map((page) => (
-          <div className="search-results-item" key={page.id}>
+          <div key={page.id}>
             <Link prefetch="intent" to={`/pages/${page.handle}`}>
               {page.title}
             </Link>
@@ -237,11 +239,11 @@ function SearchResultPageGrid({pages}: Pick<SearchQuery, 'pages'>) {
 
 function SearchResultArticleGrid({articles}: Pick<SearchQuery, 'articles'>) {
   return (
-    <div className="search-result">
+    <div>
       <h2>Articles</h2>
       <div>
         {articles?.nodes?.map((article) => (
-          <div className="search-results-item" key={article.id}>
+          <div key={article.id}>
             <Link prefetch="intent" to={`/blogs/${article.handle}`}>
               {article.title}
             </Link>
@@ -276,7 +278,7 @@ type SearchFromProps = {
 export function PredictiveSearchForm({
   action,
   children,
-  className = 'predictive-search-form',
+  className,
   ...props
 }: SearchFromProps) {
   const params = useParams();
@@ -343,7 +345,7 @@ export function PredictiveSearchResults() {
   }
 
   return (
-    <div className="predictive-search-results">
+    <div>
       <div>
         {results.map(({type, items}) => (
           <PredictiveSearchResult
@@ -356,12 +358,16 @@ export function PredictiveSearchResults() {
         ))}
       </div>
       {searchTerm.current && (
-        <Link onClick={goToSearchResult} to={`/search?q=${searchTerm.current}`}>
-          <p>
+        <Button variant="ghost" className="mt-2">
+          <Link
+            onClick={goToSearchResult}
+            to={`/search?q=${searchTerm.current}`}
+            className="flex items-center justify-center"
+          >
             View all results for <q>{searchTerm.current}</q>
-            &nbsp; →
-          </p>
-        </Link>
+            <MoveRight className="h-4 w-4 ml-2" />
+          </Link>
+        </Button>
       )}
     </div>
   );
@@ -376,8 +382,9 @@ function NoPredictiveSearchResults({
     return null;
   }
   return (
-    <p>
-      No results found for <q>{searchTerm.current}</q>
+    <p className="text-xl mt-4 tracking-wide flex items-center justify-start">
+      No results found for <q>{searchTerm.current}</q>...
+      <HeartCrack className="ml-2 h-4 w-4" />
     </p>
   );
 }
@@ -401,9 +408,11 @@ function PredictiveSearchResult({
   }&type=${pluralToSingularSearchType(type)}`;
 
   return (
-    <div className="predictive-search-result" key={type}>
+    <div key={type}>
       <Link prefetch="intent" to={categoryUrl} onClick={goToSearchResult}>
-        <h5>{isSuggestions ? 'Suggestions' : type}</h5>
+        <h5 className="text-2xl font-semibold uppercase pt-6">
+          {isSuggestions ? 'Suggestions' : type}
+        </h5>
       </Link>
       <ul>
         {items.map((item: NormalizedPredictiveSearchResultItem) => (
@@ -424,14 +433,19 @@ type SearchResultItemProps = Pick<SearchResultTypeProps, 'goToSearchResult'> & {
 
 function SearchResultItem({goToSearchResult, item}: SearchResultItemProps) {
   return (
-    <li className="predictive-search-result-item" key={item.id}>
-      <Link onClick={goToSearchResult} to={item.url}>
+    <li key={item.id}>
+      <Link
+        onClick={goToSearchResult}
+        to={item.url}
+        className="pt-6 flex gap-4"
+      >
         {item.image?.url && (
           <Image
             alt={item.image.altText ?? ''}
             src={item.image.url}
-            width={50}
-            height={50}
+            width={75}
+            height={75}
+            className="rounded shadow border border-secondary/10"
           />
         )}
         <div>
@@ -442,12 +456,10 @@ function SearchResultItem({goToSearchResult, item}: SearchResultItemProps) {
               }}
             />
           ) : (
-            <span>{item.title}</span>
+            <span className="text-lg font-semibold">{item.title}</span>
           )}
           {item?.price && (
-            <small>
-              <Money data={item.price} />
-            </small>
+            <Money className="text-base tracking-widest" data={item.price} />
           )}
         </div>
       </Link>

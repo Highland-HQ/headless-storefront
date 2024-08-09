@@ -1,45 +1,21 @@
-# Hydrogen template: Skeleton
+# Highland HQ Headless Storefront
 
-Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dovetail with [Remix](https://remix.run/), Shopify’s full stack web framework. This template contains a **minimal setup** of components, queries and tooling to get started with Hydrogen.
+> Built with Hydrogen & Remix
 
-[Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
-[Get familiar with Remix](https://remix.run/docs/en/v1)
+## 🏪 Visit Our Store!
 
-## What's included
+You can take a look at our store at https://highlandhq.com
 
-- Remix
-- Hydrogen
-- Oxygen
-- Vite
-- Shopify CLI
-- ESLint
-- Prettier
-- GraphQL generator
-- TypeScript and JavaScript flavors
-- Minimal setup of components and routes
+## 🚀 Up And Running!
 
-## Getting started
+- Node.js (I'm using the LTS version)
+- Shopify account
+- Shopify Hydrogen (optional, for local development)
 
-**Requirements:**
+### Prerequisites
 
-- Node.js version 18.0.0 or higher
-
-```bash
-npm create @shopify/hydrogen@latest
-```
-
-## Building for production
-
-```bash
-npm run build
-```
-
-## Local development
-
-```bash
-npm run dev
-```
-
-## Setup for using Customer Account API (`/account` section)
-
-Follow step 1 and 2 of <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
+1. Clone ther repo `git clone git@github.com:Highland-HQ/headless-storefront.git`
+2. After cloning the site run `cd headless-storefront && npm i`
+3. Copy .env.example to .env, and fill in the required variables
+4. (Optional) install the shopify CLI tool with `npm install -g @shopify/cli@latest`
+5. Spin up the app locally with `shopify hydrogen dev`

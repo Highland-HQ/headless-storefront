@@ -6,16 +6,18 @@ import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
+import {FEATURED_COLLECTION_QUERY} from '~/graphql/collections/FeaturedCollection';
+import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts';
+import {ArrowBigRight, ArrowRight} from 'lucide-react';
+import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
+import {Button} from '~/components/ui/Button';
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{title: 'Highland HQ | Home'}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   return defer({...deferredData, ...criticalData});
@@ -26,13 +28,14 @@ export async function loader(args: LoaderFunctionArgs) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({context}: LoaderFunctionArgs) {
-  const [{collections}] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY),
-    // Add other queries here, so that they are loaded in parallel
+  const [{collectionByHandle}] = await Promise.all([
+    context.storefront.query(FEATURED_COLLECTION_QUERY, {
+      variables: {handle: FEATURED_COLLECTION_HANDLE},
+    }),
   ]);
 
   return {
-    featuredCollection: collections.nodes[0],
+    featuredCollection: collectionByHandle,
   };
 }
 
@@ -45,7 +48,6 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
   const recommendedProducts = context.storefront
     .query(RECOMMENDED_PRODUCTS_QUERY)
     .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
       console.error(error);
       return null;
     });
@@ -72,18 +74,35 @@ function FeaturedCollection({
 }) {
   if (!collection) return null;
   const image = collection?.image;
+
   return (
-    <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
-    >
+    <div className="relative w-full h-[65vh] md:h-full">
       {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
+        <div className="w-full h-full overflow-hidden">
+          <Image
+            data={image}
+            sizes="(min-width: 100vw)"
+            className="w-full h-[85vh] object-cover"
+          />
         </div>
       )}
-      <h1>{collection.title}</h1>
-    </Link>
+      <div className="shadow-2xl absolute inset-0 bg-black/50 text-white px-4 md:px-0">
+        <div className="max-w-layout h-full mx-auto flex flex-col items-start justify-center">
+          <h1 className="text-3xl md:text-5xl font-bold mb-8">
+            SHOP OUR {collection.title.toUpperCase()}
+          </h1>
+          <Button variant="primary">
+            <Link
+              className="flex items-center font-bold"
+              to={`/collections/${collection.handle}`}
+            >
+              <span>SHOP NOW</span>
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -93,26 +112,46 @@ function RecommendedProducts({
   products: Promise<RecommendedProductsQuery | null>;
 }) {
   return (
-    <div className="recommended-products">
-      <h2>Recommended Products</h2>
+    <div className="my-12 mx-auto px-4 md:px-6">
+      <div className="flex flex-col my-4 md:flex-row items-start md:items-center justify-between">
+        <h2 className="text-xl md:text-3xl font-semibold">
+          RECOMMENDED PRODUCTS
+        </h2>
+
+        <Button
+          size="medium"
+          variant="ghost"
+          className="px-0! md:px-4 tracking-widest"
+        >
+          <Link
+            to="collections/august-collection"
+            className="flex items-center"
+          >
+            See More <ArrowRight className="h-4 w-4 ml-2" />
+          </Link>
+        </Button>
+      </div>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
-            <div className="recommended-products-grid">
+            <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
               {response
                 ? response.products.nodes.map((product) => (
                     <Link
                       key={product.id}
-                      className="recommended-product"
                       to={`/products/${product.handle}`}
+                      className="hover:scale-[0.99] transition-all"
                     >
                       <Image
+                        className="rounded shadow"
                         data={product.images.nodes[0]}
-                        aspectRatio="1/1"
+                        aspectRatio="2/3"
                         sizes="(min-width: 45em) 20vw, 50vw"
                       />
-                      <h4>{product.title}</h4>
-                      <small>
+                      <h4 className="text-lg font-semibold tracking-wide">
+                        {product.title}
+                      </h4>
+                      <small className="text-base tracking-widest">
                         <Money data={product.priceRange.minVariantPrice} />
                       </small>
                     </Link>
@@ -126,57 +165,3 @@ function RecommendedProducts({
     </div>
   );
 }
-
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
-    id
-    title
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-    handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...FeaturedCollection
-      }
-    }
-  }
-` as const;
-
-const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
-    id
-    title
-    handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-    images(first: 1) {
-      nodes {
-        id
-        url
-        altText
-        width
-        height
-      }
-    }
-  }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...RecommendedProduct
-      }
-    }
-  }
-` as const;

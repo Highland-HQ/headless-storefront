@@ -12,9 +12,10 @@ import {getVariantUrl} from '~/lib/variants';
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
+import ProductGallery from '~/components/ui/ProductGallery';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.product.title ?? ''}`}];
+  return [{title: `Highland HQ | ${data?.product.title ?? ''}`}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -133,48 +134,50 @@ export default function Product() {
     variants,
   );
 
-  const {title, descriptionHtml} = product;
+  const {title, descriptionHtml, images} = product;
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <Suspense
-          fallback={
-            <ProductForm
-              product={product}
-              selectedVariant={selectedVariant}
-              variants={[]}
-            />
-          }
-        >
-          <Await
-            errorElement="There was a problem loading product variants"
-            resolve={variants}
-          >
-            {(data) => (
+    <div className="max-w-layout mx-auto flex gap-12 mt-24">
+      <ProductGallery
+        images={images.nodes}
+        selectedVariantImage={selectedVariant?.image}
+      />
+      <div className="flex-1 w-screen md:w-1/2">
+        <div>
+          <h1 className="text-4xl font-bold mt-4">{title}</h1>
+          <ProductPrice
+            price={selectedVariant?.price}
+            compareAtPrice={selectedVariant?.compareAtPrice}
+          />
+          <br />
+          <Suspense
+            fallback={
               <ProductForm
                 product={product}
                 selectedVariant={selectedVariant}
-                variants={data?.product?.variants.nodes || []}
+                variants={[]}
               />
-            )}
-          </Await>
-        </Suspense>
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
+            }
+          >
+            <Await
+              errorElement="There was a problem loading product variants"
+              resolve={variants}
+            >
+              {(data) => (
+                <ProductForm
+                  product={product}
+                  selectedVariant={selectedVariant}
+                  variants={data?.product?.variants.nodes || []}
+                />
+              )}
+            </Await>
+          </Suspense>
+          <p className="text-2xl font-semibold mb-4 mt-12">Description</p>
+          <div
+            className="text-xl"
+            dangerouslySetInnerHTML={{__html: descriptionHtml}}
+          />
+        </div>
       </div>
       <Analytics.ProductView
         data={{
@@ -240,6 +243,12 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    images(first: 25) {
+      nodes {
+        url
+        altText
+      }
+    }
     options {
       name
       values

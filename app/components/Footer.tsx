@@ -1,6 +1,8 @@
 import {Suspense} from 'react';
 import {Await, NavLink} from '@remix-run/react';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import {Button} from './ui/Button';
+import {Copyright, Instagram} from 'lucide-react';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -42,33 +44,56 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav className="footer-menu" role="navigation">
-      {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
-        if (!item.url) return null;
-        // if the url is internal, we strip the domain
-        const url =
-          item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain) ||
-          item.url.includes(primaryDomainUrl)
-            ? new URL(item.url).pathname
-            : item.url;
-        const isExternal = !url.startsWith('/');
-        return isExternal ? (
-          <a href={url} key={item.id} rel="noopener noreferrer" target="_blank">
-            {item.title}
-          </a>
-        ) : (
-          <NavLink
-            end
-            key={item.id}
-            prefetch="intent"
-            style={activeLinkStyle}
-            to={url}
+    <nav role="navigation" className="bg-secondary text-gray-50 py-12 mt-12">
+      <div className="flex items-center justify-between max-w-layout w-full mx-auto">
+        <div>
+          <p className="text-2xl font-semibold text-primary">Highland HQ</p>
+          <p className="tracking-widest text-primary">
+            Premium Western Style Clothing
+          </p>
+        </div>
+        <div className="flex gap-4">
+          <a
+            className="text-primary"
+            href="https://www.instagram.com/highland.hq?igsh=MTA2d3ViYXdzdWcwMA=="
           >
-            {item.title}
-          </NavLink>
-        );
-      })}
+            <Instagram className="h-7 w-7" />
+          </a>
+          {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
+            if (!item.url) return null;
+            // if the url is internal, we strip the domain
+            const url =
+              item.url.includes('myshopify.com') ||
+              item.url.includes(publicStoreDomain) ||
+              item.url.includes(primaryDomainUrl)
+                ? new URL(item.url).pathname
+                : item.url;
+            const isExternal = !url.startsWith('/');
+            return isExternal ? (
+              <a
+                href={url}
+                key={item.id}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {item.title}
+              </a>
+            ) : (
+              <Button variant="primary" size="small">
+                <NavLink end key={item.id} prefetch="intent" to={url}>
+                  {item.title}
+                </NavLink>
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="max-w-layout mx-auto w-full mt-12 mb-4">
+        <p className="text-primary flex items-center tracking-widest">
+          <Copyright className="h-3 w-3 mr-2" /> Highland HQ | Powered By
+          Shopify
+        </p>
+      </div>
     </nav>
   );
 }
