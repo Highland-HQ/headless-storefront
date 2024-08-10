@@ -77,19 +77,14 @@ export function Header({
     >
       <div className="max-w-layout mx-auto flex items-center justify-center py-4 px-4">
         <div className="flex-1 flex items-center justify-start font-semibold">
-          <NavLink
-            className="text-2xl text-inherit tracking-wider"
-            prefetch="intent"
-            to="/"
-            end
-          >
+          <a className="text-2xl text-inherit tracking-wider" href="/">
             {/* <img
               src={Logo}
               alt="Highland HQ"
               className="h-24 w-auto fill-gray-50"
             /> */}
             {shop.name}
-          </NavLink>
+          </a>
         </div>
         <nav className="hidden md:flex flex-1">
           <HeaderMenu
@@ -152,14 +147,12 @@ function SubMenuWomens({toggleDrawer}: {toggleDrawer: () => void}) {
   return (
     <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
       {subMenuWomensLinks.map((link) => (
-        <NavLink
-          prefetch="intent"
-          to={link.uri}
+        <a
+          href={link.uri}
           className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
-          reloadDocument
         >
           {link.name}
-        </NavLink>
+        </a>
       ))}
     </div>
   );
@@ -175,14 +168,12 @@ function SubMenuMens({toggleDrawer}: {toggleDrawer: () => void}) {
   return (
     <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
       {subMenuMensLinks.map((link) => (
-        <NavLink
-          prefetch="intent"
-          to={link.uri}
+        <a
+          href={link.uri}
           className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
-          reloadDocument
         >
           {link.name}
-        </NavLink>
+        </a>
       ))}
     </div>
   );
@@ -230,15 +221,13 @@ export function HeaderMenu({
             : item.url;
 
         return (
-          <NavLink
+          <a
             key={item.id}
-            prefetch="intent"
-            to={url}
+            href={url}
             className="px-2 hover:bg-gray-50/20 md:rounded hover:no-underline transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1"
-            reloadDocument
           >
             {item.title}
-          </NavLink>
+          </a>
         );
       })}
     </div>
@@ -265,7 +254,7 @@ function HeaderCtas({
       </Button>
 
       <Button variant="ghost" size="small">
-        <NavLink prefetch="intent" to="/account">
+        <a href="/account">
           <Suspense fallback="Sign in">
             <Await resolve={isLoggedIn} errorElement="Sign in">
               {(isLoggedIn) =>
@@ -277,7 +266,7 @@ function HeaderCtas({
               }
             </Await>
           </Suspense>
-        </NavLink>
+        </a>
       </Button>
 
       <SearchToggle />
