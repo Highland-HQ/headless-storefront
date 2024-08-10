@@ -3,7 +3,7 @@ import {Await, NavLink, useLocation} from '@remix-run/react';
 import {type CartViewPayload, Image, useAnalytics} from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
 import {
-  ChevronDown,
+  ChevronRight,
   LogIn,
   Menu,
   Search,
@@ -17,7 +17,6 @@ import {motion} from 'framer-motion';
 import {Drawer} from './ui/Drawer';
 import {PredictiveSearchForm, PredictiveSearchResults} from './Search';
 import {CartMain} from './CartMain';
-import Logo from '~/assets/HIGHLANDcowlogo-removebg-preview.svg';
 
 interface HeaderProps {
   header: any;
@@ -41,7 +40,7 @@ export function Header({
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-  const {shop, menu, subMenu} = header;
+  const {shop, menu} = header;
 
   const location = useLocation();
 
@@ -76,7 +75,7 @@ export function Header({
         scrolled ? 'fixed text-gray-50 shadow' : 'absolute text-gray-50'
       } ${getHeaderTextClass()}`}
     >
-      <div className="max-w-layout mx-auto flex items-center justify-center py-4 px-4 lg:px-0">
+      <div className="max-w-layout mx-auto flex items-center justify-center py-4 px-4">
         <div className="flex-1 flex items-center justify-start font-semibold">
           <NavLink
             className="text-2xl text-inherit tracking-wider"
@@ -146,9 +145,10 @@ const subMenuWomensLinks = [
   {uri: "/collections/all/Women's", name: 'All Womens'},
   {uri: "/collections/tops/Women's", name: 'Womens Tops'},
   {uri: "/collections/bottoms/Women's", name: 'Womens Bottoms'},
+  {uri: '/collections/dresses/', name: 'Dresses & Rompers'},
 ];
 
-function SubMenuWomens() {
+function SubMenuWomens({toggleDrawer}: {toggleDrawer: () => void}) {
   return (
     <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
       {subMenuWomensLinks.map((link) => (
@@ -156,6 +156,7 @@ function SubMenuWomens() {
           prefetch="intent"
           to={link.uri}
           className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
+          reloadDocument
         >
           {link.name}
         </NavLink>
@@ -170,7 +171,7 @@ const subMenuMensLinks = [
   {uri: "/collections/bottoms/Men's", name: 'Mens Bottoms'},
 ];
 
-function SubMenuMens() {
+function SubMenuMens({toggleDrawer}: {toggleDrawer: () => void}) {
   return (
     <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
       {subMenuMensLinks.map((link) => (
@@ -178,6 +179,7 @@ function SubMenuMens() {
           prefetch="intent"
           to={link.uri}
           className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
+          reloadDocument
         >
           {link.name}
         </NavLink>
@@ -201,26 +203,22 @@ export function HeaderMenu({
         position="left"
         content={<SubMenuWomens />}
         toggleIcon={
-          <div className="flex items-center justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none">
-            Womens <ChevronDown className="h-4 w-4 ml-2" />
+          <div className="flex items-center justify-start md:justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-0">
+            Womens <ChevronRight className="h-4 w-4 ml-2" />
           </div>
         }
       />
+
       <Drawer
         position="left"
         content={<SubMenuMens />}
         toggleIcon={
-          <div className="flex items-center justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none">
-            Mens <ChevronDown className="h-4 w-4 ml-2" />
+          <div className="flex items-center justify-start md:justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1">
+            Mens <ChevronRight className="h-4 w-4 ml-2" />
           </div>
         }
       />
-      {/* <Button
-        variant="ghost"
-        className="px-2 hover:bg-gray-50/20 md:rounded hover:no-underline transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1"
-      >
-        Womens <ChevronDown className="h-4 w-4 ml-2" />
-      </Button> */}
+
       {(menu || FALLBACK_HEADER_MENU).items.map((item: any) => {
         if (!item.url) return null;
 
@@ -237,6 +235,7 @@ export function HeaderMenu({
             prefetch="intent"
             to={url}
             className="px-2 hover:bg-gray-50/20 md:rounded hover:no-underline transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1"
+            reloadDocument
           >
             {item.title}
           </NavLink>

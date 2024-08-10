@@ -73,6 +73,7 @@ function CartEmpty({
           to="/"
           prefetch="viewport"
           className="flex items-center justify-center"
+          reloadDocument
         >
           <span>Continue shopping</span>
           <MoveRight className="h-4 w-4 ml-2" />
