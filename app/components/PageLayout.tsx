@@ -6,7 +6,7 @@ import type {
   HeaderQuery,
 } from 'storefrontapi.generated';
 import {Footer} from '~/components/Footer';
-import {Header, HeaderMenu} from '~/components/Header';
+import {Header, HeaderMenu} from '~/components/top-nav/Header';
 import {CartMain} from '~/components/CartMain';
 import {
   PredictiveSearchForm,
