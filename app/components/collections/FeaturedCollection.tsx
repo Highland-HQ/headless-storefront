@@ -18,7 +18,7 @@ export const FeaturedCollection = ({collection}: {collection: any}) => {
           />
         </div>
       )}
-      <div className="shadow-2xl absolute inset-0 bg-black/50 text-white px-4 md:px-0">
+      <div className="shadow-2xl absolute inset-0 bg-black/50 text-white px-4">
         <div className="max-w-layout h-full mx-auto flex flex-col items-start justify-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-8">
             SHOP OUR {collection.title.toUpperCase()}

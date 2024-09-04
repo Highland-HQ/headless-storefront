@@ -1,7 +1,7 @@
 import {Suspense, useEffect, useState} from 'react';
-import {Await, NavLink, useLocation} from '@remix-run/react';
-import {type CartViewPayload, Image, useAnalytics} from '@shopify/hydrogen';
-import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
+import {Await, useLocation} from '@remix-run/react';
+import {type CartViewPayload, useAnalytics} from '@shopify/hydrogen';
+import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {
   ChevronRight,
   LogIn,
@@ -77,19 +77,16 @@ export function Header({
     >
       <div className="max-w-layout mx-auto flex items-center justify-center py-4 px-4">
         <div className="flex-1 flex items-center justify-start font-semibold">
-          <a className="text-2xl text-inherit tracking-wider" href="/">
-            {/* <img
-              src={Logo}
-              alt="Highland HQ"
-              className="h-24 w-auto fill-gray-50"
-            /> */}
+          <a
+            className="text-lg sm:text-2xl text-inherit tracking-wider"
+            href="/"
+          >
             {shop.name}
           </a>
         </div>
         <nav className="hidden md:flex flex-1">
           <HeaderMenu
             menu={menu}
-            // submenu={submenu}
             primaryDomainUrl={header.shop.primaryDomain.url}
             publicStoreDomain={publicStoreDomain}
           />
@@ -125,7 +122,6 @@ export function Header({
             </div>
             <HeaderMenu
               menu={menu}
-              // subMenu={submenu}
               primaryDomainUrl={header.shop.primaryDomain.url}
               publicStoreDomain={publicStoreDomain}
             />
@@ -143,11 +139,12 @@ const subMenuWomensLinks = [
   {uri: '/collections/dresses/', name: 'Dresses & Rompers'},
 ];
 
-function SubMenuWomens({toggleDrawer}: {toggleDrawer: () => void}) {
+function SubMenuWomens() {
   return (
     <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
       {subMenuWomensLinks.map((link) => (
         <a
+          key={link.name}
           href={link.uri}
           className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
         >
@@ -164,11 +161,12 @@ const subMenuMensLinks = [
   {uri: "/collections/bottoms/Men's", name: 'Mens Bottoms'},
 ];
 
-function SubMenuMens({toggleDrawer}: {toggleDrawer: () => void}) {
+function SubMenuMens() {
   return (
     <div className="text-3xl font-semibold tracking-wide flex flex-col gap-2">
       {subMenuMensLinks.map((link) => (
         <a
+          key={link.name}
           href={link.uri}
           className="px-4 py-2 rounded hover:bg-gray-50/20 transition-colors"
         >
@@ -204,7 +202,7 @@ export function HeaderMenu({
         position="left"
         content={<SubMenuMens />}
         toggleIcon={
-          <div className="flex items-center justify-start md:justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-1">
+          <div className="flex items-center justify-start md:justify-center md:rounded transition-all text-xl md:text-lg border-b border-gray-900 md:border-none py-4 md:py-0">
             Mens <ChevronRight className="h-4 w-4 ml-2" />
           </div>
         }
@@ -242,7 +240,7 @@ function HeaderCtas({
   return (
     <nav
       role="navigation"
-      className="flex justify-end items-center gap-1 flex-1 text-inherit"
+      className="flex justify-end items-center flex-1 text-inherit"
     >
       <Button
         variant="ghost"

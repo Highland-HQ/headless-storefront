@@ -54,8 +54,9 @@ function ProductGallery({
   return (
     <div>
       <div className="mb-4">
-        <div className="w-full h-[75vh] mx-auto">
+        <div className="w-full h-[75vh] md:h-[85vh] mx-auto">
           <Image
+            rel="preload"
             data={selectedImage}
             aspectRatio="2/3"
             className="w-full h-full object-cover"
@@ -65,12 +66,13 @@ function ProductGallery({
       </div>
 
       <div className="flex space-x-2 overflow-x-auto pb-2 max-w-full max-h-24">
-        <div className="flex space-x-2 overflow-x-auto">
+        <div className="flex space-x-2 overflow-x-scroll">
           {images.map((image, index) => (
             <Image
               key={index}
               data={image}
-              aspectRatio="2/3" // Use an appropriate aspect ratio for thumbnails
+              rel="preload"
+              aspectRatio="2/3"
               className={`thumbnail cursor-pointer w-20 h-20 object-cover border ${
                 selectedImage.url === image.url
                   ? 'border-secondary-500'

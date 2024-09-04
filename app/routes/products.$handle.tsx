@@ -10,7 +10,6 @@ import {
 import type {SelectedOption} from '@shopify/hydrogen/storefront-api-types';
 import {getVariantUrl} from '~/lib/variants';
 import {ProductPrice} from '~/components/ProductPrice';
-import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
 import ProductGallery from '~/components/ui/ProductGallery';
 
@@ -137,11 +136,13 @@ export default function Product() {
   const {title, descriptionHtml, images} = product;
 
   return (
-    <div className="max-w-layout mx-auto flex flex-col md:flex-row p-4 md:p-0 gap-12 mt-24">
-      <ProductGallery
-        images={images.nodes}
-        selectedVariantImage={selectedVariant?.image}
-      />
+    <div className="max-w-layout mx-auto flex flex-col md:flex-row p-4 gap-12 mt-24">
+      <div className="w-full md:w-3/7">
+        <ProductGallery
+          images={images.nodes}
+          selectedVariantImage={selectedVariant?.image}
+        />
+      </div>
       <div className="flex-1 w-full md:w-1/2">
         <div>
           <h1 className="text-4xl font-bold mt-4">{title}</h1>

@@ -2,7 +2,10 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, type MetaFunction} from '@remix-run/react';
 import {FEATURED_COLLECTION_QUERY} from '~/graphql/collections/FeaturedCollection';
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts';
-import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
+import {
+  FEATURED_COLLECTION_HANDLE,
+  FIRST_FEATURED_PRODUCT_HANDLE,
+} from '~/conf/SiteSettings';
 import {RecommendedProducts} from '~/components/products/RecommendedProducts';
 import {FeaturedCollection} from '~/components/collections/FeaturedCollection';
 

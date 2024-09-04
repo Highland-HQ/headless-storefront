@@ -26,10 +26,10 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
           '-'
         )}
       </div>
-      <p className="text-lg tracking-widest">
+      <p className="text-lg tracking-widest mb-6">
         Tax and Shipping Calculated at Checkout.
       </p>
-      <CartDiscounts discountCodes={cart.discountCodes} />
+      {/* <CartDiscounts discountCodes={cart.discountCodes} /> */}
       <CartCheckoutActions checkoutUrl={cart.checkoutUrl} layout={layout} />
     </div>
   );
