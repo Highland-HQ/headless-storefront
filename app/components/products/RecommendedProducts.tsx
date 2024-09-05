@@ -3,6 +3,7 @@ import {Button} from '../ui/Button';
 import {Suspense} from 'react';
 import {Await, Link} from '@remix-run/react';
 import {Image, Money} from '@shopify/hydrogen';
+import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
 
 export const RecommendedProducts = ({
   products,
@@ -19,10 +20,10 @@ export const RecommendedProducts = ({
         <Button
           size="medium"
           variant="ghost"
-          className="px-0! md:px-4 tracking-widest"
+          className="px-0! md:px-4! tracking-widest"
         >
           <Link
-            to="collections/august-collection"
+            to={`collections/${FEATURED_COLLECTION_HANDLE}`}
             className="flex items-center"
           >
             See More <ArrowRight className="h-4 w-4 ml-2" />

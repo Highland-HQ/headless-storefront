@@ -65,8 +65,8 @@ export default function Collection() {
 
   return (
     <div>
-      <div className="shadow-2xl inset-0 bg-secondary w-full flex items-end justify-start px-4 pt-24 pb-6 md:px-0 md:pt-32">
-        <div className="max-w-layout mx-auto w-full text-gray-50">
+      <div className="w-full flex items-end justify-start px-4 pt-24 md:pt-32">
+        <div className="max-w-layout mx-auto w-full text-secondary">
           <h1 className="text-4xl font-semibold tracking-wide mb-6">
             Shop All
           </h1>

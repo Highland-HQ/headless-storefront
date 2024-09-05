@@ -78,7 +78,7 @@ export function Header({
       <div className="max-w-layout mx-auto flex items-center justify-center py-4 px-4">
         <div className="flex-1 flex items-center justify-start font-semibold">
           <a
-            className="text-lg sm:text-2xl text-inherit tracking-wider"
+            className="text-lg md:text-2xl text-inherit tracking-wider"
             href="/"
           >
             {shop.name}
@@ -136,7 +136,7 @@ const subMenuWomensLinks = [
   {uri: "/collections/all/Women's", name: 'All Womens'},
   {uri: "/collections/tops/Women's", name: 'Womens Tops'},
   {uri: "/collections/bottoms/Women's", name: 'Womens Bottoms'},
-  {uri: '/collections/dresses/', name: 'Dresses & Rompers'},
+  {uri: '/collections/dresses,rompers-jumpsuits/', name: 'Dresses & Rompers'},
 ];
 
 function SubMenuWomens() {

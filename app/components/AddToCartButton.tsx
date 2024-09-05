@@ -3,7 +3,7 @@ import {CartForm, type OptimisticCartLineInput} from '@shopify/hydrogen';
 import {Button} from './ui/Button';
 import {toast} from 'sonner';
 import {useEffect} from 'react';
-import {Loader, ShoppingBag, X} from 'lucide-react';
+import {Loader, X} from 'lucide-react';
 import {motion} from 'framer-motion';
 
 export function AddToCartButton({

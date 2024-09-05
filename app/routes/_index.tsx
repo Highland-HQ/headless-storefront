@@ -5,6 +5,7 @@ import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts
 import {
   FEATURED_COLLECTION_HANDLE,
   FIRST_FEATURED_PRODUCT_HANDLE,
+  SITE_ANNOUNCEMENT_TEXT,
 } from '~/conf/SiteSettings';
 import {RecommendedProducts} from '~/components/products/RecommendedProducts';
 import {FeaturedCollection} from '~/components/collections/FeaturedCollection';
