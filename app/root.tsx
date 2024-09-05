@@ -10,6 +10,7 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
+  useLoaderData,
 } from '@remix-run/react';
 import favicon from '~/assets/favicon.svg';
 import appStyles from '~/styles/app.css?url';
@@ -17,6 +18,9 @@ import tailwindCss from './styles/tailwind.css?url';
 
 import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_WITH_SUBMENU_QUERY} from '~/lib/fragments';
+import {getToast} from 'remix-toast';
+import {useEffect} from 'react';
+import {Toaster, toast as notify} from 'sonner';
 
 export type RootLoader = typeof loader;
 
@@ -63,19 +67,26 @@ export async function loader(args: LoaderFunctionArgs) {
 
   const {storefront, env} = args.context;
 
-  return defer({
-    ...deferredData,
-    ...criticalData,
-    publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
-    shop: getShopAnalytics({
-      storefront,
-      publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
-    }),
-    consent: {
-      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
-      storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
+  // Toast stuff
+  const {toast, headers} = await getToast(args.request);
+
+  return defer(
+    {
+      ...deferredData,
+      ...criticalData,
+      publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+      shop: getShopAnalytics({
+        storefront,
+        publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
+      }),
+      consent: {
+        checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
+        storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
+      },
+      toast,
     },
-  });
+    {headers},
+  );
 }
 
 async function loadCriticalData({context}: LoaderFunctionArgs) {
@@ -123,6 +134,17 @@ export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
   const data = useRouteLoaderData<RootLoader>('root');
 
+  const toast = data?.toast;
+
+  useEffect(() => {
+    if (toast?.type === 'error') {
+      notify.error(toast.message);
+    }
+    if (toast?.type === 'success') {
+      notify.success(toast.message);
+    }
+  }, [toast]);
+
   return (
     <html lang="en">
       <head>
@@ -145,6 +167,8 @@ export function Layout({children}: {children?: React.ReactNode}) {
         )}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
+
+        <Toaster />
       </body>
     </html>
   );
