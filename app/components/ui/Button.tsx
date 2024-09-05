@@ -52,9 +52,14 @@ export const Button = ({
       disabled={disabled}
       name={name}
       value={value}
-      className={`flex items-center justify-center rounded hover:cursor-pointer ${
+      className={`flex items-center justify-center rounded  ${
         sizeClasses[size as ButtonSize]
-      } ${variantClasses[variant as ButtonVariant]} ${className}`}
+      } ${variantClasses[variant as ButtonVariant]} ${className}
+      ${
+        disabled
+          ? 'opacity-70 hover:cursor-not-allowed'
+          : 'hover:cursor-pointer'
+      }`}
     >
       {children}
     </button>

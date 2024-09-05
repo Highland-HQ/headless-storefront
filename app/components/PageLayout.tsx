@@ -1,17 +1,11 @@
-import {Await} from '@remix-run/react';
-import {Suspense} from 'react';
 import type {
   CartApiQueryFragment,
   FooterQuery,
   HeaderQuery,
 } from 'storefrontapi.generated';
 import {Footer} from '~/components/Footer';
-import {Header, HeaderMenu} from '~/components/Header';
-import {CartMain} from '~/components/CartMain';
-import {
-  PredictiveSearchForm,
-  PredictiveSearchResults,
-} from '~/components/Search';
+import {Header} from '~/components/Header';
+import {SITE_ANNOUNCEMENT_TEXT} from '~/conf/SiteSettings';
 
 interface PageLayoutProps {
   cart: Promise<CartApiQueryFragment | null>;

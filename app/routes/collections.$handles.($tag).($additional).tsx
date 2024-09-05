@@ -9,14 +9,14 @@ import {
 } from '@shopify/hydrogen';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
+import {COLLECTION_QUERY} from '~/graphql/collections/CollectionsByHandle';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''}`}];
+  return [{title: `Highland HQ | ${data?.collections[0].title ?? ''}`}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
-  const deferredData = loadDeferredData(args);
-
+  const deferredData = await loadDeferredData(args);
   const criticalData = await loadCriticalData(args);
 
   return defer({...deferredData, ...criticalData});
@@ -27,32 +27,46 @@ async function loadCriticalData({
   params,
   request,
 }: LoaderFunctionArgs) {
-  const {handle, tag} = params;
+  const {handles, tag} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 12,
   });
 
-  if (!handle) {
+  const handleList = handles ? handles.split(',') : [];
+
+  if (!handleList.length) {
     throw redirect('/collections');
   }
 
   const filters = tag ? [{tag}] : [];
 
-  const [{collection}] = await Promise.all([
+  const collectionQueries = handleList.map((handle) =>
     storefront.query(COLLECTION_QUERY, {
       variables: {handle, filters, ...paginationVariables},
     }),
-  ]);
+  );
 
-  if (!collection) {
-    throw new Response(`Collection ${handle} not found`, {
+  const collectionResults = await Promise.all(collectionQueries);
+
+  const collections = collectionResults
+    .map((result) => result?.collection)
+    .filter(Boolean);
+
+  if (!collections.length) {
+    throw new Response(`Collection ${handles} not found`, {
       status: 404,
     });
   }
 
+  const allProducts = collections.reduce((products, collection) => {
+    return products.concat(collection.products.nodes);
+  }, []);
+
   return {
-    collection,
+    collections,
+    allProducts,
+    handles: handleList,
   };
 }
 
@@ -60,56 +74,55 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
   return {};
 }
 
+function constructSimpleTitle(collections: any[]): string {
+  if (collections.length === 1) {
+    return collections[0].title;
+  }
+
+  // Simple joining of titles for multiple collections
+  return collections.map((collection) => collection.title).join(', ');
+}
+
 export default function Collection() {
-  const {collection} = useLoaderData<typeof loader>();
+  const {collections, allProducts} = useLoaderData<typeof loader>();
+
+  const firstCollection = collections[0];
+  const simpleTitle = constructSimpleTitle(collections);
 
   return (
     <div>
-      {collection?.image ? (
+      {firstCollection?.image ? (
         <>
           <Image
-            data={collection?.image}
+            data={firstCollection?.image}
             sizes="(min-width: 100vw)"
             className="w-full h-[35vh] object-cover"
           />
           <div className="shadow-2xl absolute inset-0 bg-black/50 w-full h-[35vh] flex items-end justify-start">
             <div className="max-w-layout mx-auto w-full text-gray-50">
-              <h1 className="text-4xl font-semibold tracking-wide mb-6">
-                {collection.title}
+              <h1 className="text-3xl md:text-4xl font-semibold tracking-wide mb-6 mx-4">
+                {simpleTitle}
               </h1>
             </div>
           </div>
         </>
       ) : (
-        <div className="inset-0 w-full flex items-end justify-start px-4 pt-24 pb-6 md:pt-32">
+        <div className="inset-0 w-full flex items-end justify-start px-4 pt-24 md:pt-32">
           <div className="max-w-layout mx-auto w-full text-secondary">
-            <h1 className="text-4xl font-semibold tracking-wide">
-              {collection.title}
+            <h1 className="text-4xl font-semibold tracking-wide mx-4">
+              {simpleTitle}
             </h1>
           </div>
         </div>
       )}
-      <div className="mt-12 max-w-layout mx-auto p-4 md:p-0">
-        <p>{collection.description}</p>
-        <Pagination connection={collection.products}>
-          {({nodes, isLoading, PreviousLink, NextLink}) => (
-            <>
-              <PreviousLink>
-                {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-              </PreviousLink>
-              <ProductsGrid products={nodes as any} />
-              <br />
-              <NextLink>
-                {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-              </NextLink>
-            </>
-          )}
-        </Pagination>
+
+      <div className="mt-12 max-w-layout mx-auto p-4">
+        <ProductsGrid products={allProducts} />
         <Analytics.CollectionView
           data={{
             collection: {
-              id: collection.id,
-              handle: collection.handle,
+              id: collections[0].id,
+              handle: collections[0].handle,
             },
           }}
         />
@@ -164,81 +177,3 @@ function ProductItem({
     </Link>
   );
 }
-
-const PRODUCT_ITEM_FRAGMENT = `#graphql
-  fragment MoneyProductItem on MoneyV2 {
-    amount
-    currencyCode
-  }
-  fragment ProductItem on Product {
-    id
-    handle
-    title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
-    }
-    priceRange {
-      minVariantPrice {
-        ...MoneyProductItem
-      }
-      maxVariantPrice {
-        ...MoneyProductItem
-      }
-    }
-    variants(first: 1) {
-      nodes {
-        selectedOptions {
-          name
-          value
-        }
-      }
-    }
-  }
-` as const;
-
-// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection
-const COLLECTION_QUERY = `#graphql
-  ${PRODUCT_ITEM_FRAGMENT}
-  query Collection(
-    $handle: String!
-    $country: CountryCode
-    $language: LanguageCode
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
-    $filters: [ProductFilter!]
-  ) @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
-      id
-      handle
-      title
-      description
-      image {
-        altText
-        url
-      }
-      products(
-        first: $first,
-        last: $last,
-        before: $startCursor,
-        after: $endCursor,
-        filters: $filters
-      ) {
-        nodes {
-          ...ProductItem
-        }
-        pageInfo {
-          hasPreviousPage
-          hasNextPage
-          endCursor
-          startCursor
-        }
-      }
-    }
-  }
-` as const;
