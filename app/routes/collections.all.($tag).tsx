@@ -8,6 +8,8 @@ import {
 } from '@shopify/hydrogen';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
+import {Button} from '~/components/ui/Button';
+import {ArrowDown, ArrowUp} from 'lucide-react';
 
 export const meta: MetaFunction<typeof loader> = () => {
   return [{title: `Highland HQ | Products`}];
@@ -77,12 +79,30 @@ export default function Collection() {
           {({nodes, isLoading, PreviousLink, NextLink}) => (
             <>
               <PreviousLink>
-                {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+                {isLoading ? (
+                  'Loading...'
+                ) : (
+                  <Button variant="secondary" size="medium">
+                    Load Previous
+                    <span>
+                      <ArrowUp className="h-4 w-4 ml-2" />
+                    </span>
+                  </Button>
+                )}
               </PreviousLink>
               <ProductsGrid products={nodes as any} />
               <br />
               <NextLink>
-                {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+                {isLoading ? (
+                  'Loading...'
+                ) : (
+                  <Button variant="secondary" size="medium">
+                    Load More
+                    <span>
+                      <ArrowDown className="h-4 w-4 ml-2" />
+                    </span>
+                  </Button>
+                )}
               </NextLink>
             </>
           )}
