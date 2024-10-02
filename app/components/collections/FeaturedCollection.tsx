@@ -14,7 +14,7 @@ export const FeaturedCollection = ({collection}: {collection: any}) => {
           <Image
             data={image}
             sizes="(min-width: 100vw)"
-            className="w-full h-[85vh] object-cover"
+            className="w-full h-[70vh] object-cover"
           />
         </div>
       )}
