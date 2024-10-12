@@ -11,7 +11,14 @@ import {RecommendedProducts} from '~/components/products/RecommendedProducts';
 import {FeaturedCollection} from '~/components/collections/FeaturedCollection';
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Highland HQ | Home'}];
+  return [
+    {title: 'Highland HQ | Home'},
+    {
+      name: 'description',
+      content:
+        'Highland HQ: Your premium Western wear destination. Find quality boots, hats, jeans, shirts, dresses, and jewelry. Elevate your style with authentic Western fashion.',
+    },
+  ];
 };
 
 export async function loader(args: LoaderFunctionArgs) {

@@ -26,15 +26,11 @@ async function loadCriticalData({context, request}: LoaderFunctionArgs) {
   return {collections};
 }
 
-function loadDeferredData({context}: LoaderFunctionArgs) {
-  return {};
-}
-
 export default function Collections() {
   const {collections} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collections">
+    <div>
       <h1>Collections</h1>
       <Pagination connection={collections}>
         {({nodes, isLoading, PreviousLink, NextLink}) => (
