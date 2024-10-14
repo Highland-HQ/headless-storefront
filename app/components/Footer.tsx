@@ -48,19 +48,16 @@ function FooterMenu({
       role="navigation"
       className="bg-secondary text-gray-50 py-12 mt-12 p-4"
     >
-      <div className="flex items-center justify-between max-w-layout w-full mx-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between max-w-layout w-full mx-auto">
         <div>
           <p className="text-2xl font-semibold text-primary">Highland HQ</p>
           <p className="tracking-widest text-primary">
             Premium Western Style Clothing
           </p>
         </div>
-        <div className="flex gap-4">
-          <a
-            className="text-primary"
-            href="https://www.instagram.com/highland.hq?igsh=MTA2d3ViYXdzdWcwMA=="
-          >
-            <Instagram className="h-7 w-7" />
+        <div className="flex pt-4 md:pt-0 gap-4 text-primary">
+          <a href="https://www.instagram.com/highland.hq?igsh=MTA2d3ViYXdzdWcwMA==">
+            <Instagram className="h-6 w-6" />
           </a>
           {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
             if (!item.url) return null;
@@ -82,19 +79,17 @@ function FooterMenu({
                 {item.title}
               </a>
             ) : (
-              <Button variant="primary" size="small">
-                <NavLink end key={item.id} prefetch="intent" to={url}>
-                  {item.title}
-                </NavLink>
-              </Button>
+              <NavLink end key={item.id} prefetch="intent" to={url}>
+                {item.title}
+              </NavLink>
             );
           })}
         </div>
       </div>
       <div className="max-w-layout mx-auto w-full mt-12">
         <p className="text-primary flex items-center tracking-widest">
-          <Copyright className="h-3 w-3 mr-2" /> Highland HQ | Powered By
-          Shopify
+          <Copyright className="h-3 w-3 mr-2" /> Highland HQ | All Rights
+          Reserved
         </p>
       </div>
     </nav>
