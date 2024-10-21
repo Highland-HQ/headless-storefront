@@ -19,15 +19,15 @@ export function Nav({header, isLoggedIn, cart, publicStoreDomain}: NavProps) {
     <header className={`w-screen`}>
       <AnimatePresence>
         {isAnnouncementVisible && (
-          <div className="bg-primary-50">
+          <div className="bg-primary-50 px-2">
             <motion.div
               initial={{opacity: 1, height: 'auto'}}
               exit={{opacity: 0, height: 0}}
               transition={{duration: 0.3}}
-              className="max-w-layout flex items-center justify-between text-base font-semibold py-2 mx-auto px-4 md:px-0"
+              className="max-w-layout flex items-center justify-between text-sm tracking-wide md:text-base font-semibold py-2 mx-auto px-4 md:px-0"
             >
               <div className="flex items-center justify-start">
-                <Info className="h-5 w-5 mr-2" />
+                <Info className="hidden lg:inline h-5 w-5 mr-2" />
                 <span>{SITE_ANNOUNCEMENT_TEXT}</span>
               </div>
 

@@ -3,4 +3,4 @@ export const FEATURED_COLLECTION_QUERY: string = 'tag:Recommended';
 export const FIRST_FEATURED_PRODUCT_HANDLE: string = 'highland-trucker-hats';
 
 export const SITE_ANNOUNCEMENT_TEXT: string =
-  'Lorem ipsum dolar sit amet, lorem ipsum dolar sit amet.';
+  "We can currently only accept PayPal/Venmo. We're working on it and appreciate your understanding!";
