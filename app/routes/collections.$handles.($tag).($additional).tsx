@@ -92,7 +92,7 @@ export default function Collection() {
   return (
     <div>
       {firstCollection?.image ? (
-        <>
+        <div className="relative">
           <Image
             data={firstCollection?.image}
             sizes="(min-width: 100vw)"
@@ -105,9 +105,9 @@ export default function Collection() {
               </h1>
             </div>
           </div>
-        </>
+        </div>
       ) : (
-        <div className="inset-0 w-full flex items-end justify-start px-4 pt-24 md:pt-32">
+        <div className="inset-0 w-full flex items-end justify-start pt-12">
           <div className="max-w-layout mx-auto w-full text-secondary">
             <h1 className="text-4xl font-semibold tracking-wide mx-4">
               {simpleTitle}
@@ -116,7 +116,7 @@ export default function Collection() {
         </div>
       )}
 
-      <div className="mt-12 max-w-layout mx-auto p-4">
+      <div className="mt-6 md:mt-12 max-w-layout mx-auto p-4">
         <ProductsGrid products={allProducts} />
         <Analytics.CollectionView
           data={{
