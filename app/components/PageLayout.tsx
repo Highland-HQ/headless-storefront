@@ -4,8 +4,8 @@ import type {
   HeaderQuery,
 } from 'storefrontapi.generated';
 import {Footer} from '~/components/Footer';
-import {Header} from '~/components/Header';
 import {SITE_ANNOUNCEMENT_TEXT} from '~/conf/SiteSettings';
+import {Nav} from './nav/Nav';
 
 interface PageLayoutProps {
   cart: Promise<CartApiQueryFragment | null>;
@@ -27,14 +27,14 @@ export function PageLayout({
   return (
     <>
       {header && (
-        <Header
+        <Nav
           header={header}
           cart={cart}
           isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
         />
       )}
-      <main className="m-0! p-0">{children}</main>
+      <main className="m-0! p-0 min-h-screen">{children}</main>
       <Footer
         footer={footer}
         header={header}

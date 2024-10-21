@@ -1,6 +1,8 @@
 import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
 import {type Shop} from '@shopify/hydrogen/storefront-api-types';
+import {Button} from '~/components/ui/Button';
+import {ArrowLeft} from 'lucide-react';
 
 type SelectedPolicies = keyof Pick<
   Shop,
@@ -45,14 +47,16 @@ export default function Policy() {
   const {policy} = useLoaderData<typeof loader>();
 
   return (
-    <div className="policy">
+    <div className="max-w-layout mx-auto p-4">
       <br />
       <br />
-      <div>
-        <Link to="/policies">← Back to Policies</Link>
-      </div>
+      <Link to="/policies">
+        <Button variant="secondary">
+          <ArrowLeft /> Back to Policies
+        </Button>
+      </Link>
       <br />
-      <h1>{policy.title}</h1>
+      <h1 className="text-2xl font-semibold mb-6">{policy.title}</h1>
       <div dangerouslySetInnerHTML={{__html: policy.body}} />
     </div>
   );
