@@ -1,7 +1,6 @@
 import {defer, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {
-  Pagination,
   getPaginationVariables,
   Image,
   Money,
@@ -12,8 +11,28 @@ import {useVariantUrl} from '~/lib/variants';
 import {COLLECTION_QUERY} from '~/graphql/collections/CollectionsByHandle';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Highland HQ | ${data?.collections[0].title ?? ''}`}];
+  return [
+    {title: `Highland HQ | ${data?.collections[0].title ?? ''}`},
+    {
+      name: 'description',
+      content: generateMetaDescription(data?.collections[0]),
+    },
+  ];
 };
+
+function generateMetaDescription(collection: any): string {
+  if (!collection) {
+    return 'Explore our collection at Highland HQ, featuring quality products to suit every style.';
+  }
+
+  const {title, description, products} = collection;
+  const productCount = products?.nodes?.length ?? 0;
+  const productSnippet = productCount
+    ? `Explore ${productCount} products, including our ${products.nodes[0]?.title} and more.`
+    : '';
+
+  return `${title} - ${description || ''} ${productSnippet}`.trim();
+}
 
 export async function loader(args: LoaderFunctionArgs) {
   const deferredData = await loadDeferredData(args);
