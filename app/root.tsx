@@ -10,9 +10,8 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
-  useLoaderData,
 } from '@remix-run/react';
-import favicon from '~/assets/favicon.svg';
+import favicon from '~/assets/HighlandHQ.png';
 import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 
@@ -47,6 +46,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
 export function links() {
   return [
+    {rel: 'icon', href: favicon, type: 'image/png'},
     {rel: 'stylesheet', href: tailwindCss},
     {rel: 'stylesheet', href: appStyles},
     {

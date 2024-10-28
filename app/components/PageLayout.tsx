@@ -4,7 +4,6 @@ import type {
   HeaderQuery,
 } from 'storefrontapi.generated';
 import {Footer} from '~/components/Footer';
-import {SITE_ANNOUNCEMENT_TEXT} from '~/conf/SiteSettings';
 import {Nav} from './nav/Nav';
 
 interface PageLayoutProps {
