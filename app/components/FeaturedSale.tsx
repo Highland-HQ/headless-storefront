@@ -10,14 +10,14 @@ interface FeaturedSaleProps {
   };
 }
 
-export const FeaturedSale = ({mainText, product}: FeaturedSaleProps) => {
+export const FeaturedSale = ({product}: FeaturedSaleProps) => {
   const randomImage =
     product.images?.nodes[
       Math.floor(Math.random() * product.images.nodes.length)
     ]?.url;
 
   return (
-    <div className="relative w-screen h-[70vh] mt-10 rounded-lg p-4">
+    <div className="relative w-screen h-[70vh] mt-4 rounded-lg p-4">
       {randomImage && (
         <img
           src={randomImage}
@@ -31,7 +31,9 @@ export const FeaturedSale = ({mainText, product}: FeaturedSaleProps) => {
             BOGO FREE
           </p>
           <h1 className="text-5xl md:text-9xl font-bold mb-2">CLAW CLIPS</h1>
-          <h2 className="text-4xl">Buy one get one free on all claw clips!</h2>
+          <h2 className="text-2xl md:text-4xl pt-2 md:pt-0">
+            Buy one get one free on all claw clips!
+          </h2>
           <Link to={`products/western-claw-clips`}>
             <Button type="button" variant="primary" className="mt-6">
               <span>FIND YOUR FAVORITE</span>
