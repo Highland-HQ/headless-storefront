@@ -5,6 +5,8 @@ import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts
 import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
 import {RecommendedProducts} from '~/components/products/RecommendedProducts';
 import {FeaturedCollection} from '~/components/collections/FeaturedCollection';
+import {FeaturedSale} from '~/components/FeaturedSale';
+import {PRODUCT_QUERY} from '~/graphql/products/Product';
 
 export const meta: MetaFunction = () => {
   return [
@@ -25,14 +27,18 @@ export async function loader(args: LoaderFunctionArgs) {
 }
 
 async function loadCriticalData({context}: LoaderFunctionArgs) {
-  const [{collectionByHandle}] = await Promise.all([
+  const [{collectionByHandle}, {product}] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY, {
       variables: {handle: FEATURED_COLLECTION_HANDLE},
+    }),
+    context.storefront.query(PRODUCT_QUERY, {
+      variables: {handle: 'western-claw-clips'},
     }),
   ]);
 
   return {
     featuredCollection: collectionByHandle,
+    featuredProduct: product,
   };
 }
 
@@ -61,6 +67,10 @@ export default function Homepage() {
   return (
     <div>
       <FeaturedCollection collection={data.featuredCollection} />
+      <FeaturedSale
+        mainText="BOGO Free On All Claw Clips!"
+        product={data.featuredProduct}
+      />
       <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
