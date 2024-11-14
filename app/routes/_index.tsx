@@ -5,7 +5,7 @@ import {RECOMMENDED_PRODUCTS_QUERY} from '~/graphql/products/RecommendedProducts
 import {FEATURED_COLLECTION_HANDLE} from '~/conf/SiteSettings';
 import {RecommendedProducts} from '~/components/products/RecommendedProducts';
 import {FeaturedCollection} from '~/components/collections/FeaturedCollection';
-import {FeaturedSale} from '~/components/featuredSale';
+import {FeaturedSale} from '~/components/FeaturedSale';
 import {PRODUCT_QUERY} from '~/graphql/products/Product';
 
 export const meta: MetaFunction = () => {
