@@ -19,7 +19,7 @@ export function Nav({header, isLoggedIn, cart, publicStoreDomain}: NavProps) {
     <header className={`w-screen`}>
       <AnimatePresence>
         {isAnnouncementVisible && (
-          <div className="bg-primary-50 px-2">
+          <div className="bg-primary-50 px-4">
             <motion.div
               initial={{opacity: 1, height: 'auto'}}
               exit={{opacity: 0, height: 0}}
@@ -44,7 +44,7 @@ export function Nav({header, isLoggedIn, cart, publicStoreDomain}: NavProps) {
       </AnimatePresence>
 
       <div className="bg-secondary text-primary-50">
-        <div className="flex flex-col max-w-layout mx-auto p-4 md:pr-4 md:pl-0 py-4 gap-2">
+        <div className="flex flex-col max-w-layout mx-auto p-4 md:pr-4 py-4 gap-2">
           <div className="flex items-center justify-between">
             <Button variant="ghost" size="small">
               <a

@@ -17,7 +17,7 @@ export const FeaturedSale = ({product}: FeaturedSaleProps) => {
     ]?.url;
 
   return (
-    <div className="relative w-screen h-[70vh] mt-4 rounded-lg p-4">
+    <div className="relative w-screen h-[70vh] rounded-lg p-4">
       {randomImage && (
         <img
           src={randomImage}
@@ -30,7 +30,7 @@ export const FeaturedSale = ({product}: FeaturedSaleProps) => {
           <p className="text-xl font-bold tracking-widest text-primary">
             BOGO FREE
           </p>
-          <h1 className="text-5xl md:text-9xl font-bold mb-2">CLAW CLIPS</h1>
+          <h1 className="text-5xl md:text-8xl font-bold mb-2">CLAW CLIPS</h1>
           <h2 className="text-2xl md:text-4xl pt-2 md:pt-0">
             Buy one get one free on all claw clips!
           </h2>

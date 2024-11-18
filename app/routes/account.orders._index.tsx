@@ -11,6 +11,8 @@ import type {
   CustomerOrdersFragment,
   OrderItemFragment,
 } from 'customer-accountapi.generated';
+import {Button} from '~/components/ui/Button';
+import {MoveRight} from 'lucide-react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Orders'}];
@@ -77,11 +79,16 @@ function OrdersTable({orders}: Pick<CustomerOrdersFragment, 'orders'>) {
 
 function EmptyOrders() {
   return (
-    <div>
-      <p>You haven&apos;t placed any orders yet.</p>
+    <div className="mt-4">
+      <p className="text-xl">You haven't placed any orders yet.</p>
       <br />
       <p>
-        <Link to="/collections">Start Shopping →</Link>
+        <Link to="/collections">
+          <Button variant="secondary">
+            <span>Start Shopping</span>
+            <MoveRight className="h-4 w-4 ml-2" />
+          </Button>
+        </Link>
       </p>
     </div>
   );

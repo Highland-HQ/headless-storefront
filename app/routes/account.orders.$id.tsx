@@ -58,7 +58,7 @@ export default function OrderRoute() {
     fulfillmentStatus,
   } = useLoaderData<typeof loader>();
   return (
-    <div className="account-order">
+    <div>
       <h2>Order {order.name}</h2>
       <p>Placed on {new Date(order.processedAt!).toDateString()}</p>
       <br />
