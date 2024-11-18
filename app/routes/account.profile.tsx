@@ -13,6 +13,7 @@ import {
   useOutletContext,
   type MetaFunction,
 } from '@remix-run/react';
+import {Button} from '~/components/ui/Button';
 
 export type ActionResponse = {
   error: string | null;
@@ -89,34 +90,45 @@ export default function AccountProfile() {
   const customer = action?.customer ?? account?.customer;
 
   return (
-    <div className="account-profile">
-      <h2>My profile</h2>
+    <div className="mt-4">
+      <h2 className="text-2xl font-bold">My Profile</h2>
       <br />
-      <Form method="PUT">
-        <legend>Personal information</legend>
+      <Form method="PUT" className="flex flex-col gap-2">
         <fieldset>
-          <label htmlFor="firstName">First name</label>
-          <input
-            id="firstName"
-            name="firstName"
-            type="text"
-            autoComplete="given-name"
-            placeholder="First name"
-            aria-label="First name"
-            defaultValue={customer.firstName ?? ''}
-            minLength={2}
-          />
-          <label htmlFor="lastName">Last name</label>
-          <input
-            id="lastName"
-            name="lastName"
-            type="text"
-            autoComplete="family-name"
-            placeholder="Last name"
-            aria-label="Last name"
-            defaultValue={customer.lastName ?? ''}
-            minLength={2}
-          />
+          <div className="inline-block space-y-2">
+            <div className="flex flex-col">
+              <label htmlFor="firstName" className="text-lg tracking-wide">
+                First Name
+              </label>
+              <input
+                className="p-2 rounded bg-primary-50 text-secondary border-none mt-1"
+                id="firstName"
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+                placeholder="First name"
+                aria-label="First name"
+                defaultValue={customer.firstName ?? ''}
+                minLength={2}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="lastName" className="text-lg tracking-wide">
+                Last Name
+              </label>
+              <input
+                className="p-2 rounded bg-primary-50 text-secondary border-none mt-1"
+                id="lastName"
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                placeholder="Last name"
+                aria-label="Last name"
+                defaultValue={customer.lastName ?? ''}
+                minLength={2}
+              />
+            </div>
+          </div>
         </fieldset>
         {action?.error ? (
           <p>
@@ -127,10 +139,15 @@ export default function AccountProfile() {
         ) : (
           <br />
         )}
-        <button type="submit" disabled={state !== 'idle'}>
-          {state !== 'idle' ? 'Updating' : 'Update'}
-        </button>
       </Form>
+      <Button
+        variant="secondary"
+        className="mt-2"
+        type="submit"
+        disabled={state !== 'idle'}
+      >
+        {state !== 'idle' ? 'Updating' : 'Update'}
+      </Button>
     </div>
   );
 }

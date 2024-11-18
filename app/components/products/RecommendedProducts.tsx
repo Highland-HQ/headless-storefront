@@ -42,17 +42,19 @@ export const RecommendedProducts = ({
                       className="hover:scale-[0.99] transition-all"
                     >
                       <Image
-                        className="rounded shadow"
+                        className="rounded-t shadow"
                         data={product.images.nodes[0]}
                         aspectRatio="2/3"
                         sizes="(min-width: 45em) 20vw, 50vw"
                       />
-                      <h4 className="text-lg font-semibold tracking-wide">
-                        {product.title}
-                      </h4>
-                      <small className="text-base tracking-widest">
-                        <Money data={product.priceRange.minVariantPrice} />
-                      </small>
+                      <div className="bg-secondary rounded-b p-2">
+                        <h4 className="text-sm font-semibold tracking-wide text-primary">
+                          {product.title}
+                        </h4>
+                        <small className="text-base tracking-widest text-primary-50">
+                          <Money data={product.priceRange.minVariantPrice} />
+                        </small>
+                      </div>
                     </Link>
                   ))
                 : null}

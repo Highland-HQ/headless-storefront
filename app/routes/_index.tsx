@@ -7,6 +7,7 @@ import {RecommendedProducts} from '~/components/products/RecommendedProducts';
 import {FeaturedCollection} from '~/components/collections/FeaturedCollection';
 import {FeaturedSale} from '~/components/FeaturedSale';
 import {PRODUCT_QUERY} from '~/graphql/products/Product';
+import {InfoSection} from '~/components/InfoSection';
 
 export const meta: MetaFunction = () => {
   return [
@@ -67,6 +68,7 @@ export default function Homepage() {
   return (
     <div>
       <FeaturedCollection collection={data.featuredCollection} />
+      <InfoSection />
       <FeaturedSale
         mainText="BOGO Free On All Claw Clips!"
         product={data.featuredProduct}
