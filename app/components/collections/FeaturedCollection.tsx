@@ -23,7 +23,7 @@ export const FeaturedCollection = ({collection}: {collection: any}) => {
           <p className="text-xl font-bold tracking-widest text-primary">
             SHOP OUR
           </p>
-          <h1 className="text-5xl md:text-8xl font-bold mb-8">
+          <h1 className="text-5xl md:text-7xl font-bold mb-8">
             {collection.title.toUpperCase()}
           </h1>
           <Button variant="primary">

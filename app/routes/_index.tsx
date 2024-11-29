@@ -7,6 +7,7 @@ import {RecommendedProducts} from '~/components/products/RecommendedProducts';
 import {FeaturedCollection} from '~/components/collections/FeaturedCollection';
 import {FeaturedSale} from '~/components/FeaturedSale';
 import {PRODUCT_QUERY} from '~/graphql/products/Product';
+import {InfoSection} from '~/components/InfoSection';
 
 export const meta: MetaFunction = () => {
   return [
@@ -27,18 +28,23 @@ export async function loader(args: LoaderFunctionArgs) {
 }
 
 async function loadCriticalData({context}: LoaderFunctionArgs) {
-  const [{collectionByHandle}, {product}] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY, {
-      variables: {handle: FEATURED_COLLECTION_HANDLE},
-    }),
-    context.storefront.query(PRODUCT_QUERY, {
-      variables: {handle: 'western-claw-clips'},
-    }),
-  ]);
+  const [{collectionByHandle}, {product}, {featuredSaleCollection}] =
+    await Promise.all([
+      context.storefront.query(FEATURED_COLLECTION_QUERY, {
+        variables: {handle: FEATURED_COLLECTION_HANDLE},
+      }),
+      context.storefront.query(PRODUCT_QUERY, {
+        variables: {handle: 'western-claw-clips'},
+      }),
+      context.storefront.query(FEATURED_COLLECTION_QUERY, {
+        variables: {handle: 'october-collection'},
+      }),
+    ]);
 
   return {
     featuredCollection: collectionByHandle,
     featuredProduct: product,
+    featuredSaleCollection,
   };
 }
 
@@ -67,9 +73,11 @@ export default function Homepage() {
   return (
     <div>
       <FeaturedCollection collection={data.featuredCollection} />
+      <InfoSection />
       <FeaturedSale
         mainText="BOGO Free On All Claw Clips!"
-        product={data.featuredProduct}
+        // product={data.featuredProduct}
+        collection={data.featuredSaleCollection}
       />
       <RecommendedProducts products={data.recommendedProducts} />
     </div>

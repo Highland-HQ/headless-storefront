@@ -4,39 +4,49 @@ import {Link} from '@remix-run/react';
 
 interface FeaturedSaleProps {
   mainText: string;
-  product: {
+  product?: {
     title: string;
     images: {nodes: Array<{url: string}>};
   };
+  // this isn't bad code I promise
+  collection: any;
 }
 
-export const FeaturedSale = ({product}: FeaturedSaleProps) => {
+// Fuck this component needs help...
+export const FeaturedSale = ({product, collection}: FeaturedSaleProps) => {
   const randomImage =
-    product.images?.nodes[
+    product?.images?.nodes[
       Math.floor(Math.random() * product.images.nodes.length)
     ]?.url;
 
+  // const collectionImage =
+  //   collection.images?.nodes[
+  //     Math.floor(Math.random() * collection.images.nodes.length)
+  //   ]?.url;
+
   return (
-    <div className="relative w-screen h-[70vh] mt-4 rounded-lg p-4">
-      {randomImage && (
-        <img
-          src={randomImage}
-          alt={`${product.title} Image`}
-          className="w-full h-full object-cover rounded-lg"
-        />
-      )}
+    <div className="relative w-screen h-[70vh] rounded-lg p-4">
+      {/* {collectionImage && ( */}
+      <img
+        src="https://cdn.shopify.com/s/files/1/0701/9036/6953/collections/R.jpg?v=1722399867"
+        alt={`Black Friday Inspired Photo`}
+        className="w-full h-full object-cover rounded-lg"
+      />
+      {/* )} */}
       <div className="m-4 p-4 rounded-lg absolute inset-0 flex flex-col items-start justify-center bg-black/50 text-zinc-50">
         <div className="max-w-layout w-full mx-auto">
           <p className="text-xl font-bold tracking-widest text-primary">
-            BOGO FREE
+            SITEWIDE SALE
           </p>
-          <h1 className="text-5xl md:text-9xl font-bold mb-2">CLAW CLIPS</h1>
+          <h1 className="text-5xl md:text-8xl font-bold mb-2">
+            BLACK FRIDAY SALE
+          </h1>
           <h2 className="text-2xl md:text-4xl pt-2 md:pt-0">
-            Buy one get one free on all claw clips!
+            65% OFF SITEWIDE APPLIED AT CHECKOUT!
           </h2>
-          <Link to={`products/western-claw-clips`}>
+          <Link to={`collections/all`}>
             <Button type="button" variant="primary" className="mt-6">
-              <span>FIND YOUR FAVORITE</span>
+              <span>SHOP NOW</span>
               <MoveRight className="h-4 w-4 ml-2" />
             </Button>
           </Link>

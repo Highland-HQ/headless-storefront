@@ -1,8 +1,13 @@
 import {ReactNode} from 'react';
 
-type ButtonSize = 'small' | 'medium' | 'large';
-type ButtonType = 'button' | 'submit' | 'reset';
-type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost';
+export type ButtonSize = 'small' | 'medium' | 'large';
+export type ButtonType = 'button' | 'submit' | 'reset';
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'outline'
+  | 'ghost';
 
 interface ButtonProps {
   children: ReactNode;
