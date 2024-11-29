@@ -9,6 +9,14 @@ export const RECOMMENDED_PRODUCTS_QUERY = `#graphql
         currencyCode
       }
     }
+    variants(first: 1) {
+      nodes {
+        compareAtPrice {
+          amount
+          currencyCode
+        }
+      }
+    }
     images(first: 1) {
       nodes {
         id
