@@ -11,7 +11,7 @@ export function Nav({header, isLoggedIn, cart, publicStoreDomain}: NavProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   const [isAnnouncementVisible, setIsAnnouncementVisible] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   const {shop, menu} = header;
 
