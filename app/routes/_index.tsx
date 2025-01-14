@@ -74,11 +74,11 @@ export default function Homepage() {
     <div>
       <FeaturedCollection collection={data.featuredCollection} />
       <InfoSection />
-      {/* <FeaturedSale
+      <FeaturedSale
         mainText="BOGO Free On All Claw Clips!"
         // product={data.featuredProduct}
         collection={data.featuredSaleCollection}
-      /> */}
+      />
       <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
