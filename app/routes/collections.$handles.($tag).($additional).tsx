@@ -126,7 +126,7 @@ export default function Collection() {
           </div>
         </div>
       ) : (
-        <div className="inset-0 w-full flex items-end justify-start pt-12">
+        <div className="inset-0 w-full flex items-end justify-start pt-6">
           <div className="max-w-layout mx-auto w-full text-secondary">
             <h1 className="text-4xl font-semibold tracking-wide mx-4">
               {simpleTitle}
@@ -135,7 +135,7 @@ export default function Collection() {
         </div>
       )}
 
-      <div className="mt-6 md:mt-12 max-w-layout mx-auto p-4">
+      <div className="mt-6 max-w-layout mx-auto p-4">
         <ProductsGrid products={allProducts} />
         <Analytics.CollectionView
           data={{
@@ -179,7 +179,7 @@ function ProductItem({
     <Link key={product.id} prefetch="intent" to={variantUrl}>
       {product.featuredImage && (
         <Image
-          className="rounded shadow-sm border border-secondary/10"
+          className="rounded-t shadow-sm"
           alt={product.featuredImage.altText || product.title}
           aspectRatio="2/3"
           data={product.featuredImage}
@@ -187,12 +187,14 @@ function ProductItem({
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h4 className="text-xl tracking-wide font-semibold mt-2">
-        {product.title}
-      </h4>
-      <small className="text-base tracking-widest">
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
+      <div className="bg-secondary rounded-b p-2">
+        <h4 className="text-sm font-semibold tracking-wide text-primary">
+          {product.title}
+        </h4>
+        <small className="text-base tracking-widest text-primary-50">
+          <Money data={product.priceRange.minVariantPrice} />
+        </small>
+      </div>
     </Link>
   );
 }
