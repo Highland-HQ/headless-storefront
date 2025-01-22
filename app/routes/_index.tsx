@@ -73,11 +73,22 @@ export default function Homepage() {
   return (
     <div>
       <FeaturedCollection collection={data.featuredCollection} />
+      <FeaturedSale
+        image_url="https://cdn.shopify.com/s/files/1/0701/9036/6953/collections/banner.jpg?v=1725410478"
+        image_alt="Two people looking into the distance in a vast field, with two horses in the frame."
+        heading="PREMIUM WESTERN WEAR"
+        subheading="SEE ALL OUR NEW ARRIVALS"
+        buttonText="SHOP ALL"
+        buttonLink="/collections/all"
+      />
       <InfoSection />
       <FeaturedSale
-        mainText="BOGO Free On All Claw Clips!"
-        // product={data.featuredProduct}
-        collection={data.featuredSaleCollection}
+        image_url="https://cdn.shopify.com/s/files/1/0701/9036/6953/files/DSC_0094.jpg?v=1731365565&width=1400&height=2100&crop=center"
+        image_alt="Closeup on woman with blonde hair, wearing graphic tee with image of desert."
+        heading="WEEKLY SALE"
+        subheading="30% OFF ALL GRAPHIC TEES!"
+        buttonText="SHOP GRAPHIC TEES"
+        buttonLink="collections/all/Graphic Tees"
       />
       <RecommendedProducts products={data.recommendedProducts} />
     </div>
