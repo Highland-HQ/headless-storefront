@@ -67,14 +67,14 @@ export default function Collection() {
 
   return (
     <div>
-      <div className="w-full flex items-end justify-start px-4 pt-24 md:pt-32">
+      <div className="w-full flex items-end justify-start px-4 pt-6">
         <div className="max-w-layout mx-auto w-full text-secondary">
           <h1 className="text-4xl font-semibold tracking-wide mb-6">
             Shop All
           </h1>
         </div>
       </div>
-      <div className="mt-12 max-w-layout mx-auto p-4 md:p-0">
+      <div className="mt-6 max-w-layout mx-auto p-4 md:p-0">
         <Pagination connection={products}>
           {({nodes, isLoading, PreviousLink, NextLink}) => (
             <>
@@ -96,7 +96,11 @@ export default function Collection() {
                 {isLoading ? (
                   'Loading...'
                 ) : (
-                  <Button variant="secondary" size="medium">
+                  <Button
+                    variant="secondary"
+                    size="medium"
+                    className="text-primary-50"
+                  >
                     Load More
                     <span>
                       <ArrowDown className="h-4 w-4 ml-2" />
@@ -141,7 +145,7 @@ function ProductItem({
     <Link key={product.id} prefetch="intent" to={variantUrl}>
       {product.featuredImage && (
         <Image
-          className="rounded shadow-sm border border-secondary/10"
+          className="rounded-t"
           alt={product.featuredImage.altText || product.title}
           aspectRatio="2/3"
           data={product.featuredImage}
@@ -149,12 +153,14 @@ function ProductItem({
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h4 className="text-xl tracking-wide font-semibold mt-2">
-        {product.title}
-      </h4>
-      <small className="text-base tracking-widest">
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
+      <div className="bg-secondary rounded-b p-2">
+        <h4 className="text-sm font-semibold tracking-wide text-primary">
+          {product.title}
+        </h4>
+        <small className="text-base tracking-widest text-primary-50">
+          <Money data={product.priceRange.minVariantPrice} />
+        </small>
+      </div>
     </Link>
   );
 }

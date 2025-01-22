@@ -3,7 +3,7 @@ import {EarthLock, Headset, Package} from 'lucide-react';
 export const InfoSection = () => {
   return (
     <div className="w-screen rounded-lg p-4">
-      <div className="max-w-layout gap-4 w-full mx-auto grid grid-cols-1 lg:grid-cols-3">
+      <div className="gap-4 w-full mx-auto grid grid-cols-1 lg:grid-cols-3">
         <div className="col-span-1 gap-4 flex justify-start items-center p-4 rounded-xl bg-secondary">
           <Package className="h-10 w-10 text-primary" />
           <div className="flex flex-col items-start tracking-wide">

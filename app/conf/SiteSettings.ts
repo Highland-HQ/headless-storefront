@@ -1,4 +1,4 @@
-export const FEATURED_COLLECTION_HANDLE: string = 'november-collection';
+export const FEATURED_COLLECTION_HANDLE: string = 'all';
 export const FEATURED_COLLECTION_QUERY: string = 'tag:Recommended';
 export const FIRST_FEATURED_PRODUCT_HANDLE: string = 'highland-trucker-hats';
 

@@ -1,5 +1,28 @@
 import {Image} from '@shopify/hydrogen';
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect, useMemo, memo} from 'react';
+
+const MemoizedThumbnail = memo(function Thumbnail({
+  image,
+  isSelected,
+  onClick,
+}: {
+  image: {url: string; altText?: string};
+  isSelected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <Image
+      data={image}
+      rel="preload"
+      aspectRatio="2/3"
+      className={`thumbnail cursor-pointer w-20 h-20 object-cover border ${
+        isSelected ? 'border-secondary-500' : 'border-transparent'
+      }`}
+      sizes="80px"
+      onClick={onClick}
+    />
+  );
+});
 
 function ProductGallery({
   images,
@@ -68,18 +91,10 @@ function ProductGallery({
       <div className="flex space-x-2 overflow-x-auto pb-2 max-w-full max-h-24">
         <div className="flex space-x-2 overflow-x-scroll">
           {images.map((image, index) => (
-            <Image
+            <MemoizedThumbnail
               key={index}
-              data={image}
-              rel="preload"
-              aspectRatio="2/3"
-              className={`thumbnail cursor-pointer w-20 h-20 object-cover border ${
-                selectedImage.url === image.url
-                  ? 'border-secondary-500'
-                  : 'border-transparent'
-              }`}
-              sizes="80px"
-              ref={(el) => (thumbnailsRef.current[index] = el)}
+              image={image}
+              isSelected={selectedImage.url === image.url}
               onClick={() => setSelectedImage(image)}
             />
           ))}
