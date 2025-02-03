@@ -22,13 +22,13 @@ export const Drawer = ({
   const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  const toggleDrawer = () => {
+  const toggledrawer = () => {
     setDrawerIsOpen(!drawerIsOpen);
   };
 
-  // Pass closeBoth (toggleDrawer) to the content
+  // Pass closeBoth (toggledrawer) to the content
   const contentWithToggle = cloneElement(content as React.ReactElement, {
-    toggleDrawer,
+    toggledrawer,
   });
 
   const variants = {
@@ -74,7 +74,7 @@ export const Drawer = ({
         className="inline cursor-pointer"
         variant="ghost"
         size="small"
-        onClick={toggleDrawer}
+        onClick={toggledrawer}
       >
         {toggleIcon}
       </Button>
@@ -88,7 +88,7 @@ export const Drawer = ({
             exit={{opacity: 0}}
             transition={{duration: 0.3}}
             className="fixed top-0 left-0 z-40 h-screen w-screen bg-gray-950"
-            onClick={toggleDrawer}
+            onClick={toggledrawer}
           />
         )}
       </AnimatePresence>
@@ -107,7 +107,7 @@ export const Drawer = ({
       >
         <div className="flex justify-between items-center p-4">
           <span className="font-bold text-xl">{header}</span>
-          <Button onClick={toggleDrawer} size="small" variant="ghost">
+          <Button onClick={toggledrawer} size="small" variant="ghost">
             <X className="h-6 w-6" />
           </Button>
         </div>

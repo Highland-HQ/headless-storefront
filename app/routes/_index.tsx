@@ -83,12 +83,12 @@ export default function Homepage() {
       />
       <InfoSection />
       <FeaturedSale
-        image_url="https://cdn.shopify.com/s/files/1/0701/9036/6953/files/DSC_0094.jpg?v=1731365565&width=1400&height=2100&crop=center"
+        image_url="https://cdn.shopify.com/s/files/1/0701/9036/6953/files/webflatlay2.jpg?v=1722572380&width=1400&height=2100&crop=center"
         image_alt="Closeup on woman with blonde hair, wearing graphic tee with image of desert."
         heading="WEEKLY SALE"
-        subheading="30% OFF ALL GRAPHIC TEES!"
-        buttonText="SHOP GRAPHIC TEES"
-        buttonLink="collections/all/Graphic Tees"
+        subheading="BOGO ON ALL ACCESSORIES, DISCOUNT APPLIED AT CHECKOUT!"
+        buttonText="SHOP ACCESSORIES"
+        buttonLink="collections/jewelry-accessories"
       />
       <RecommendedProducts products={data.recommendedProducts} />
     </div>
