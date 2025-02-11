@@ -76,20 +76,20 @@ export default function Homepage() {
       <FeaturedSale
         image_url="https://cdn.shopify.com/s/files/1/0701/9036/6953/collections/banner.jpg?v=1725410478"
         image_alt="Two people looking into the distance in a vast field, with two horses in the frame."
-        heading="PREMIUM WESTERN WEAR"
-        subheading="SEE ALL OUR NEW ARRIVALS"
-        buttonText="SHOP ALL"
+        heading="15% OFF SITEWIDE"
+        subheading="SALE CALCULATED AT CHECKOUT"
+        buttonText="SHOP NOW"
         buttonLink="/collections/all"
       />
       <InfoSection />
-      <FeaturedSale
+      {/* <FeaturedSale
         image_url="https://cdn.shopify.com/s/files/1/0701/9036/6953/files/webflatlay2.jpg?v=1722572380&width=1400&height=2100&crop=center"
         image_alt="Closeup on woman with blonde hair, wearing graphic tee with image of desert."
         heading="WEEKLY SALE"
         subheading="BOGO ON ALL ACCESSORIES, DISCOUNT APPLIED AT CHECKOUT!"
         buttonText="SHOP ACCESSORIES"
         buttonLink="collections/jewelry-accessories"
-      />
+      /> */}
       <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
