@@ -76,10 +76,10 @@ export default function Homepage() {
       <FeaturedSale
         image_url="https://cdn.shopify.com/s/files/1/0701/9036/6953/collections/banner.jpg?v=1725410478"
         image_alt="Two people looking into the distance in a vast field, with two horses in the frame."
-        heading="15% OFF SITEWIDE"
-        subheading="SALE CALCULATED AT CHECKOUT"
+        heading="NEW CLEARANCE ITEMS"
+        subheading="45% OFF SELECT ITEMS"
         buttonText="SHOP NOW"
-        buttonLink="/collections/all"
+        buttonLink="/collections/clearance"
       />
       <InfoSection />
       {/* <FeaturedSale
